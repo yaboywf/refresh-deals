@@ -23,17 +23,18 @@ class LoginPage extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 alignment: Alignment.centerLeft,
                 child: Image.asset(
                   'images/logo.png', 
-                  width: 400, 
-                  height: 50,
+                  width: 280,
+                  height: 100,
                   fit: BoxFit.contain
                 )
               ),
+              SizedBox(height: 150,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -44,23 +45,63 @@ class LoginPage extends StatelessWidget {
                 ],
               ),
               SubHeading(text: "Username",),
-              MyTextField(controller: usernameController, hintText: 'Enter Email', obscureText: false),
+              MyTextField(controller: usernameController, hintText: 'Enter Username', obscureText: false),
               SizedBox(height: 20,),
               SubHeading(text: "Password",),
               MyTextField(controller: passwordController, hintText: 'Enter Password', obscureText: true),
-              TextButton(
-                onPressed: () {}, 
-                style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(Colors.white)
-                ),
-                child: Text(
-                  "Login",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold
+              SizedBox(height: 20,),
+              Align(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: 300,
+                  child: TextButton(
+                    onPressed: () {}, 
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all(Colors.transparent),
+                      shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: BorderSide(color: Colors.black))),
+                    ),
+                    child: Text(
+                      "Login",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold
+                      ),
+                    )
                   ),
-                )
-              )
+                ),
+              ),
+              SizedBox(height: 10,),
+              Align(
+                alignment: Alignment.center,
+                child: TextButton(
+                  onPressed: () {}, 
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(Colors.transparent),
+                  ),
+                  child: Text(
+                    "Forgotten Your Password?",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold
+                    ),
+                  )
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: TextButton(
+                  onPressed: () {}, 
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(Colors.transparent),
+                  ),
+                  child: Text(
+                    "New to Refresh Deals? Create an account!",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  )
+                ),
+              ),
             ]
           ),
         ),
