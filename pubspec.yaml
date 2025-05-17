@@ -11,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  font_awesome_flutter: ^10.0.0
+
   cupertino_icons: ^1.0.8
 
 dev_dependencies:
@@ -25,6 +27,11 @@ flutter:
   assets:
     - images/authentication_bg.jpg
     - images/logo.png
+    - images/content_bg.jpg
+    - images/bread.webp
+    - images/cabbage.png
+    - images/muffin.png
+    - images/orange.png
 
   # fonts:
   #   - family: Schyler

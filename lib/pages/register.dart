@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../widgets/text_field.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+class SignupPage extends StatelessWidget {
+  SignupPage({super.key});
+  final TextEditingController newUsernameController = TextEditingController();
+  final TextEditingController newPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -34,35 +34,36 @@ class LoginPage extends StatelessWidget {
                   fit: BoxFit.contain
                 )
               ),
-              SizedBox(height: 150,),
+              SizedBox(height: 100,),
               Align(
                 alignment: Alignment.center,
-                child: Text("Login", style: TextStyle(
+                child: Text("Signup", style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w900
                 )),
               ),
               SizedBox(height: 20,),
-              SubHeading(text: "Username",),
-              MyTextField(controller: usernameController, hintText: 'Enter Username', obscureText: false),
+              SubHeading(text: "New Username",),
+              MyTextField(controller: newUsernameController, hintText: 'Enter Username', obscureText: false),
               SizedBox(height: 20,),
-              SubHeading(text: "Password",),
-              MyTextField(controller: passwordController, hintText: 'Enter Password', obscureText: true),
+              SubHeading(text: "New Password",),
+              MyTextField(controller: newPasswordController, hintText: 'Enter Password', obscureText: true),
+              SizedBox(height: 20,),
+              SubHeading(text: "Email",),
+              MyTextField(controller: newPasswordController, hintText: 'Enter Email', obscureText: false),
               SizedBox(height: 20,),
               Align(
                 alignment: Alignment.center,
                 child: SizedBox(
                   width: 300,
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/buyer_home');
-                    }, 
+                    onPressed: () {}, 
                     style: ButtonStyle(
                       backgroundColor: WidgetStateProperty.all(Colors.transparent),
                       shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: BorderSide(color: Colors.black))),
                     ),
                     child: Text(
-                      "Login",
+                      "Next",
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold
@@ -75,30 +76,14 @@ class LoginPage extends StatelessWidget {
               Align(
                 alignment: Alignment.center,
                 child: TextButton(
-                  onPressed: () {}, 
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(Colors.transparent),
-                  ),
-                  child: Text(
-                    "Forgotten Your Password?",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold
-                    ),
-                  )
-                ),
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: TextButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/register');
+                    Navigator.pushReplacementNamed(context, '/login');
                   }, 
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all(Colors.transparent),
                   ),
                   child: Text(
-                    "New to Refresh Deals? Create an account!",
+                    "I already have an account",
                     style: TextStyle(
                       color: Colors.black,
                     ),
