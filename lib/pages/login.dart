@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/text_field.dart';
+import '../widgets/text_label.dart';
+import '../widgets/header.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -25,15 +27,7 @@ class LoginPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Image.asset(
-                  'images/logo.png', 
-                  width: 280,
-                  height: 100,
-                  fit: BoxFit.contain
-                )
-              ),
+              Header(),
               SizedBox(height: 150,),
               Align(
                 alignment: Alignment.center,
@@ -43,11 +37,11 @@ class LoginPage extends StatelessWidget {
                 )),
               ),
               SizedBox(height: 20,),
-              SubHeading(text: "Username",),
-              MyTextField(controller: usernameController, hintText: 'Enter Username', obscureText: false),
+              TextLabel(text: "Username",),
+              CustomTextField(controller: usernameController, hintText: 'Enter Username', obscureText: false),
               SizedBox(height: 20,),
-              SubHeading(text: "Password",),
-              MyTextField(controller: passwordController, hintText: 'Enter Password', obscureText: true),
+              TextLabel(text: "Password",),
+              CustomTextField(controller: passwordController, hintText: 'Enter Password', obscureText: true),
               SizedBox(height: 20,),
               Align(
                 alignment: Alignment.center,
@@ -108,21 +102,6 @@ class LoginPage extends StatelessWidget {
             ]
           ),
         ),
-      ),
-    );
-  }
-}
-
-class SubHeading extends StatelessWidget {
-  final String text;
-  const SubHeading({super.key, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(text,
-      style: TextStyle(
-        fontSize: 17,
-        fontWeight: FontWeight.bold
       ),
     );
   }

@@ -3,20 +3,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NavBar extends StatefulWidget {
   final String accountType;
+  final int currentIndex;
 
-  const NavBar({super.key, this.accountType = 'buyer'});
+  const NavBar({super.key, this.accountType = 'buyer', this.currentIndex = 0});
 
   @override
   State<NavBar> createState() => _NavigationBarState();
 }
 
 class _NavigationBarState extends State<NavBar> {
-  int _currentIndex = 0;
-
   static const buyerNavData = [
-    {'icon': FontAwesomeIcons.house, 'label': 'Home'},
-    {'icon': FontAwesomeIcons.cartShopping, 'label': 'Shop'},
-    {'icon': FontAwesomeIcons.solidUser, 'label': 'Profile'},
+    {'icon': FontAwesomeIcons.house, 'label': 'Home', 'route': '/buyer_home'},
+    {'icon': FontAwesomeIcons.cartShopping, 'label': 'Shop', 'route': '/shop'},
+    {'icon': FontAwesomeIcons.solidUser, 'label': 'Profile', 'route': '/profile'},
   ];
 
   static const sellerNavData = [
@@ -31,14 +30,14 @@ class _NavigationBarState extends State<NavBar> {
 
     return BottomNavigationBar(
       backgroundColor: Colors.grey.shade200,
-      currentIndex: _currentIndex,
-      onTap: (index) => setState(() => _currentIndex = index),
+      currentIndex: widget.currentIndex,
+      onTap: (index) => Navigator.pushReplacementNamed(context, navData[index]['route'] as String),
       type: BottomNavigationBarType.fixed,
       showUnselectedLabels: false,
       showSelectedLabels: false,
       items: List.generate(navData.length, (index) {
         final item = navData[index];
-        final bool isSelected = index == _currentIndex;
+        final bool isSelected = index == widget.currentIndex;
 
         return BottomNavigationBarItem(
           label: '',

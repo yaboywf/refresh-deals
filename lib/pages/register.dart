@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/text_field.dart';
+import '../widgets/text_label.dart';
+import '../widgets/header.dart';
 
 class SignupPage extends StatelessWidget {
   SignupPage({super.key});
@@ -25,15 +27,7 @@ class SignupPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Image.asset(
-                  'images/logo.png', 
-                  width: 280,
-                  height: 100,
-                  fit: BoxFit.contain
-                )
-              ),
+              Header(),
               SizedBox(height: 100,),
               Align(
                 alignment: Alignment.center,
@@ -43,14 +37,14 @@ class SignupPage extends StatelessWidget {
                 )),
               ),
               SizedBox(height: 20,),
-              SubHeading(text: "New Username",),
-              MyTextField(controller: newUsernameController, hintText: 'Enter Username', obscureText: false),
+              TextLabel(text: "New Username",),
+              CustomTextField(controller: newUsernameController, hintText: 'Enter Username', obscureText: false),
               SizedBox(height: 20,),
-              SubHeading(text: "New Password",),
-              MyTextField(controller: newPasswordController, hintText: 'Enter Password', obscureText: true),
+              TextLabel(text: "New Password",),
+              CustomTextField(controller: newPasswordController, hintText: 'Enter Password', obscureText: true),
               SizedBox(height: 20,),
-              SubHeading(text: "Email",),
-              MyTextField(controller: newPasswordController, hintText: 'Enter Email', obscureText: false),
+              TextLabel(text: "Email",),
+              CustomTextField(controller: newPasswordController, hintText: 'Enter Email', obscureText: false),
               SizedBox(height: 20,),
               Align(
                 alignment: Alignment.center,
@@ -93,21 +87,6 @@ class SignupPage extends StatelessWidget {
             ]
           ),
         ),
-      ),
-    );
-  }
-}
-
-class SubHeading extends StatelessWidget {
-  final String text;
-  const SubHeading({super.key, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(text,
-      style: TextStyle(
-        fontSize: 17,
-        fontWeight: FontWeight.bold
       ),
     );
   }
