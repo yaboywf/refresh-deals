@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'pages/login.dart';
 import 'pages/register.dart';
+
 import 'pages/buyer_home.dart';
+import 'pages/buyer_shop.dart';
 import 'pages/profile.dart';
 
 void main() {
@@ -24,6 +26,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/register': (context) => SignupPage(),
         '/buyer_home': (context) => BuyerHomepage(),
+        '/buyer_shop': (context) => BuyerShopPage(),
         '/profile': (context) => Profile(),
       },
     );

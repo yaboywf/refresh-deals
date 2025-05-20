@@ -14,7 +14,7 @@ class NavBar extends StatefulWidget {
 class _NavigationBarState extends State<NavBar> {
   static const buyerNavData = [
     {'icon': FontAwesomeIcons.house, 'label': 'Home', 'route': '/buyer_home'},
-    {'icon': FontAwesomeIcons.cartShopping, 'label': 'Shop', 'route': '/shop'},
+    {'icon': FontAwesomeIcons.cartShopping, 'label': 'Shop', 'route': '/buyer_shop'},
     {'icon': FontAwesomeIcons.solidUser, 'label': 'Profile', 'route': '/profile'},
   ];
 

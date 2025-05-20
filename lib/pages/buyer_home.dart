@@ -12,7 +12,7 @@ class BuyerHomepage extends StatelessWidget {
     {"icon": FontAwesomeIcons.apple, "text": "Fruit", "color": const Color.fromRGBO(144, 238, 144, 1)},
     {"icon": FontAwesomeIcons.drumstickBite, "text": "Meat", "color": Colors.orange},
     {"icon": FontAwesomeIcons.breadSlice, "text": "Pastry", "color": const Color.fromRGBO(189, 179, 255, 1)},
-    {"icon": FontAwesomeIcons.ellipsis, "text": "Other", "color": const Color.fromRGBO(255, 179, 232, 1)},
+    {"icon": FontAwesomeIcons.ellipsis, "text": "Others", "color": const Color.fromRGBO(255, 179, 232, 1)},
   ]);
 
   final recommendationList = List<Map>.from([
