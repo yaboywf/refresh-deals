@@ -5,6 +5,7 @@ import 'pages/register.dart';
 import 'pages/buyer_home.dart';
 import 'pages/buyer_shop.dart';
 import 'pages/profile.dart';
+import 'pages/buyer_product.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,10 +22,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: LoginPage(),
+      home: BuyerProduct(),
       routes: {
         '/login': (context) => LoginPage(),
         '/register': (context) => SignupPage(),
+        '/buyer_product': (context) => BuyerProduct(),
         '/buyer_home': (context) => BuyerHomepage(),
         '/buyer_shop': (context) => BuyerShopPage(),
         '/profile': (context) => Profile(),

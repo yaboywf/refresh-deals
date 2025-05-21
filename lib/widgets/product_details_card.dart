@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
 
-class ProductDetailsCard extends StatefulWidget {
+class ProductDetailsCard extends StatelessWidget {
   final Map<String, dynamic> product;
 
   const ProductDetailsCard({super.key, required this.product});
 
   @override
-  State<ProductDetailsCard> createState() => _ProductDetailsCardState();
-}
-
-class _ProductDetailsCardState extends State<ProductDetailsCard> {
-  @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: Key(widget.product['id'].toString()),
+      key: Key(product['id'].toString()),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
-        Navigator.pushReplacementNamed(context, "/");
+        Navigator.pushReplacementNamed(context, "/buyer_product", arguments: {'productName': product['name']});
       },
       background: Container(
         alignment: Alignment.centerRight,
