@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../widgets/navigation_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../widgets/product_quantity_card.dart';
 
 class BuyerProduct extends StatefulWidget {
   String productName;
@@ -16,10 +17,12 @@ class _BuyerProductState extends State<BuyerProduct> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
+
     final args = ModalRoute.of(context)?.settings.arguments;
-    
-    if (args != null && args is Map<String, dynamic> && args.containsKey('productName')) {
+
+    if (args != null &&
+        args is Map<String, dynamic> &&
+        args.containsKey('productName')) {
       widget.productName = args['productName'];
     }
 
@@ -33,16 +36,19 @@ class _BuyerProductState extends State<BuyerProduct> {
     if (response.statusCode == 200) {
       Map<String, dynamic> data = json.decode(response.body);
       List<dynamic> meals = data['meals'] ?? [];
-      List<Map<String, String>> mealDetails = meals.map((meal) {
-        return {
-          'mealName': meal['strMeal'] as String,
-          'mealImage': meal['strMealThumb'] as String,
-        };
-      }).toList();
+      List<Map<String, String>> mealDetails =
+          meals.map((meal) {
+            return {
+              'mealName': meal['strMeal'] as String,
+              'mealImage': meal['strMealThumb'] as String,
+            };
+          }).toList();
 
       return mealDetails;
     } else {
-      return [{"mealName": "", "mealImage": ""}];
+      return [
+        {"mealName": "", "mealImage": ""},
+      ];
     }
   }
 
@@ -65,6 +71,7 @@ class _BuyerProductState extends State<BuyerProduct> {
         ),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
@@ -173,7 +180,7 @@ class _BuyerProductState extends State<BuyerProduct> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 10.0),
                 decoration: BoxDecoration(
-                  color: Color.fromRGBO(255, 255, 255, 0.9),
+                  color: Color.fromRGBO(255, 255, 255, 0.8),
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.all(Radius.circular(20.0)),
                   boxShadow: [
@@ -208,7 +215,9 @@ class _BuyerProductState extends State<BuyerProduct> {
                 future: fetchRelatedRecipies(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(
+                      child: CircularProgressIndicator(color: Colors.black),
+                    );
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (snapshot.hasData) {
@@ -222,7 +231,7 @@ class _BuyerProductState extends State<BuyerProduct> {
                       decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                        color: Color.fromRGBO(255, 255, 255, 0.9),
+                        color: Color.fromRGBO(255, 255, 255, 0.8),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withAlpha(135),
@@ -247,7 +256,7 @@ class _BuyerProductState extends State<BuyerProduct> {
                             scrollDirection: Axis.horizontal,
                             child: Row(
                               children: [
-                                if (mealDetails.isNotEmpty) 
+                                if (mealDetails.isNotEmpty)
                                   ...mealDetails.map((meal) {
                                     return Row(
                                       children: [
@@ -289,8 +298,7 @@ class _BuyerProductState extends State<BuyerProduct> {
                                         SizedBox(width: 10.0),
                                       ],
                                     );
-                                  }
-                                ),
+                                  }),
                                 if (mealDetails.isEmpty)
                                   Text('No related recipies found'),
                               ],
@@ -303,6 +311,35 @@ class _BuyerProductState extends State<BuyerProduct> {
                     return Center(child: Text('No meals found'));
                   }
                 },
+              ),
+              SizedBox(height: 10.0),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                child: Text(
+                  "Quantity",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
+                ),
+              ),
+              SizedBox(height: 10.0),
+              Padding(
+                padding: EdgeInsets.fromLTRB(15.0, 0, 15.0, 10.0),
+                child: Wrap(
+                  children: [
+                    ProductQuantityCard(
+                      timerDuration: 65,
+                      originalPrice: 3.75,
+                      discount: 20,
+                      quantity: 3,
+                    ),
+                    SizedBox(width: 10.0),
+                    ProductQuantityCard(
+                      timerDuration: 67,
+                      originalPrice: 3.75,
+                      discount: 20,
+                      quantity: 3,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
