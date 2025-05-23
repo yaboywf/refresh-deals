@@ -23,7 +23,7 @@ class Background extends StatelessWidget {
           image: AssetImage(imagePath),
           fit: BoxFit.cover,
           colorFilter:
-              imagePath != "images/authentication_bg.jpg"
+              imagePath == "images/authentication_bg.jpg"
                   ? ColorFilter.mode(
                     Color.fromRGBO(255, 255, 255, 1.0),
                     BlendMode.softLight,
