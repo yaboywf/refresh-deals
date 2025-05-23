@@ -46,7 +46,7 @@ class LoginPage extends StatelessWidget {
                   onPressed:
                       () => Navigator.pushReplacementNamed(
                         context,
-                        '/buyer_home',
+                        usernameController.text == "shop" ? '/shop_home' : '/buyer_home',
                       ),
                   style: OutlinedButton.styleFrom(
                     minimumSize: Size(300, 30),
