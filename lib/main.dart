@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: BuyerProduct(),
+      home: LoginPage(),
       routes: {
         '/login': (context) => LoginPage(),
         '/register': (context) => SignupPage(),

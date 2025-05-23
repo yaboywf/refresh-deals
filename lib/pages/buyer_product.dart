@@ -324,6 +324,10 @@ class _BuyerProductState extends State<BuyerProduct> {
               Padding(
                 padding: EdgeInsets.fromLTRB(15.0, 0, 15.0, 10.0),
                 child: Wrap(
+                  alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  runAlignment: WrapAlignment.center,
+                  spacing: 10.0,
                   children: [
                     ProductQuantityCard(
                       timerDuration: 65,
@@ -331,7 +335,6 @@ class _BuyerProductState extends State<BuyerProduct> {
                       discount: 20,
                       quantity: 3,
                     ),
-                    SizedBox(width: 10.0),
                     ProductQuantityCard(
                       timerDuration: 67,
                       originalPrice: 3.75,

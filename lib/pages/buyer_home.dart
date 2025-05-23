@@ -32,6 +32,8 @@ class BuyerHomepage extends StatelessWidget {
     return Scaffold(
       bottomNavigationBar: NavBar(),
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage('images/content_bg.jpg'), 

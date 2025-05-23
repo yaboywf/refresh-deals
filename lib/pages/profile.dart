@@ -33,6 +33,8 @@ class Profile extends StatelessWidget {
     return Scaffold(
       bottomNavigationBar: NavBar(accountType: 'buyer', currentIndex: 2),
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage('images/authentication_bg.jpg'),

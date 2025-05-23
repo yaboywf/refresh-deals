@@ -39,7 +39,7 @@ class BuyerShopPage extends StatelessWidget {
     },
     {
       "image": "images/product3.jpg",
-      "name": "Product 3",
+      "name": "Bread",
       "category": "Category 3",
       "minPrice": 10.00,
       "maxPrice": 20.00,
