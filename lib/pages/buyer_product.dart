@@ -5,15 +5,15 @@ import '../widgets/navigation_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../widgets/product_quantity_card.dart';
 
-class BuyerProduct extends StatefulWidget {
+class BuyerProductPage extends StatefulWidget {
   String productName;
-  BuyerProduct({super.key, this.productName = ''});
+  BuyerProductPage({super.key, this.productName = ''});
 
   @override
-  State<BuyerProduct> createState() => _BuyerProductState();
+  State<BuyerProductPage> createState() => _BuyerProductState();
 }
 
-class _BuyerProductState extends State<BuyerProduct> {
+class _BuyerProductState extends State<BuyerProductPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();

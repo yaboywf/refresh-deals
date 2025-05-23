@@ -14,14 +14,27 @@ class NavBar extends StatefulWidget {
 class _NavigationBarState extends State<NavBar> {
   static const buyerNavData = [
     {'icon': FontAwesomeIcons.house, 'label': 'Home', 'route': '/buyer_home'},
-    {'icon': FontAwesomeIcons.cartShopping, 'label': 'Shop', 'route': '/buyer_shop'},
-    {'icon': FontAwesomeIcons.solidUser, 'label': 'Profile', 'route': '/profile'},
+    {
+      'icon': FontAwesomeIcons.cartShopping,
+      'label': 'Shop',
+      'route': '/buyer_shop',
+    },
+    {
+      'icon': FontAwesomeIcons.solidUser,
+      'label': 'Profile',
+      'route': '/profile',
+    },
   ];
 
   static const sellerNavData = [
-    {'icon': FontAwesomeIcons.house, 'label': 'Home'},
-    {'icon': FontAwesomeIcons.magnifyingGlass, 'label': 'Shop'},
-    {'icon': FontAwesomeIcons.solidUser, 'label': 'Profile'},
+    {'icon': FontAwesomeIcons.house, 'label': 'Home', 'route': '/shop_home'},
+    {'icon': FontAwesomeIcons.boxesStacked, 'label': 'Inventory'},
+    {
+      'icon': FontAwesomeIcons.solidUser,
+      'label': 'Profile',
+      'route': '/profile',
+      "args": "accountType=shop",
+    },
   ];
 
   @override
@@ -31,7 +44,15 @@ class _NavigationBarState extends State<NavBar> {
     return BottomNavigationBar(
       backgroundColor: Colors.grey.shade200,
       currentIndex: widget.currentIndex,
-      onTap: (index) => Navigator.pushReplacementNamed(context, navData[index]['route'] as String),
+      onTap: (index) {
+        Navigator.pushReplacementNamed(
+          context,
+          navData[index]['route'] as String,
+          arguments: navData[index].containsKey('args')
+            ? {(navData[index]['args'] as String).split('=')[0]: (navData[index]['args'] as String).split('=')[1]}
+            : null,
+        );
+      },
       type: BottomNavigationBarType.fixed,
       showUnselectedLabels: false,
       showSelectedLabels: false,
@@ -43,28 +64,24 @@ class _NavigationBarState extends State<NavBar> {
           label: '',
           icon: Container(
             padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-            decoration: isSelected ? BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(12),
-            ) : null,
+            decoration:
+                isSelected
+                    ? BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(12),
+                    )
+                    : null,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                FaIcon(
-                  item['icon'] as IconData,
-                  size: 20,
-                  color: Colors.black,
-                ),
+                FaIcon(item['icon'] as IconData, size: 20, color: Colors.black),
                 const SizedBox(height: 4),
                 Text(
                   item['label'] as String,
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12
-                  ),
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
                 ),
               ],
-            )
+            ),
           ),
           activeIcon: Container(
             padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
@@ -75,20 +92,14 @@ class _NavigationBarState extends State<NavBar> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                FaIcon(
-                  item['icon'] as IconData,
-                  size: 24,
-                  color: Colors.black,
-                ),
+                FaIcon(item['icon'] as IconData, size: 24, color: Colors.black),
                 const SizedBox(height: 4),
                 Text(
                   item['label'] as String,
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
+                  style: TextStyle(color: Colors.black),
                 ),
               ],
-            )
+            ),
           ),
         );
       }),

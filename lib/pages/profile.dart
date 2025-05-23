@@ -5,19 +5,19 @@ import '../widgets/text_label.dart';
 import '../widgets/header.dart';
 
 class Profile extends StatelessWidget {
-  final String accountType;
+  String accountType;
   Profile({super.key, this.accountType = 'buyer'});
 
   Future<String> fetchData() async {
-    await Future.delayed(const Duration(seconds: 2)); // Simulate delay
+    await Future.delayed(const Duration(seconds: 2));
     return "Data has been fetched!";
   }
 
   Future<String> fetchDataWithError() async {
-    await Future.delayed(const Duration(seconds: 2)); // Simulate delay
+    await Future.delayed(const Duration(seconds: 2));
     throw Exception(
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac feugiat augue, quis aliquet orci. Praesent in purus et turpis dictum tincidunt vel fermentum nisl. Nullam in est commodo risus suscipit blandit nec ut nunc. Proin eu erat quis ligula suscipit venenatis. Phasellus ullamcorper metus sed erat mollis, vehicula rutrum.',
-    ); // Simulate error
+    );
   }
 
   final TextEditingController nameController = TextEditingController();
@@ -26,12 +26,20 @@ class Profile extends StatelessWidget {
   final TextEditingController storeNameController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final arguments =
+        ModalRoute.of(context)!.settings.arguments as Map<String, String>?;
+
+    if (arguments != null && arguments.containsKey('accountType')) {
+      accountType = arguments['accountType']!;
+    }
+
     return Scaffold(
-      bottomNavigationBar: NavBar(accountType: 'buyer', currentIndex: 2),
+      bottomNavigationBar: NavBar(accountType: accountType, currentIndex: 2),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -155,29 +163,7 @@ class Profile extends StatelessWidget {
                     ],
                     Align(
                       alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all(
-                            Colors.transparent,
-                          ),
-                          minimumSize: WidgetStateProperty.all(Size(80, 0)),
-                          shape: WidgetStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              side: BorderSide(color: Colors.black),
-                            ),
-                          ),
-                          padding: WidgetStateProperty.all(EdgeInsets.all(3.0)),
-                        ),
-                        child: Text(
-                          "Save",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                      child: BorderButton(text: "Save",),
                     ),
                     SizedBox(height: 30),
                     Text(
@@ -203,36 +189,40 @@ class Profile extends StatelessWidget {
                     ),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all(
-                            Colors.transparent,
-                          ),
-                          minimumSize: WidgetStateProperty.all(Size(80, 0)),
-                          shape: WidgetStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              side: BorderSide(color: Colors.black),
-                            ),
-                          ),
-                          padding: WidgetStateProperty.all(EdgeInsets.all(3.0)),
-                        ),
-                        child: Text(
-                          "Change",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+                      child: BorderButton(text: "Change",),
                     ),
+                    Center(
+                      child: BorderButton(text: "Logout", onPressed: () => Navigator.pushReplacementNamed(context, "/login"),),
+                    )
                   ],
                 ),
               );
             }
           },
         ),
+      ),
+    );
+  }
+}
+
+class BorderButton extends StatelessWidget {
+  final String text;
+  final VoidCallback? onPressed;
+  const BorderButton({super.key, required this.text, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      onPressed: onPressed ?? () {},
+      style: OutlinedButton.styleFrom(
+        minimumSize: Size(80, 0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        side: BorderSide(color: Colors.black),
+        padding: EdgeInsets.all(3.0),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       ),
     );
   }

@@ -20,6 +20,10 @@ class LoginPage extends StatelessWidget {
           image: DecorationImage(
             image: AssetImage('images/authentication_bg.jpg'),
             fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Color.fromRGBO(255, 255, 255, 1.0),
+              BlendMode.softLight,
+            ),
           ),
         ),
         child: Padding(
@@ -28,79 +32,101 @@ class LoginPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(),
-              SizedBox(height: 150,),
-              Align(
-                alignment: Alignment.center,
-                child: Text("Login", style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w900
-                )),
-              ),
-              SizedBox(height: 20,),
-              TextLabel(text: "Username",),
-              CustomTextField(controller: usernameController, hintText: 'Enter Username', obscureText: false),
-              SizedBox(height: 20,),
-              TextLabel(text: "Password",),
-              CustomTextField(controller: passwordController, hintText: 'Enter Password', obscureText: true),
-              SizedBox(height: 20,),
-              Align(
-                alignment: Alignment.center,
-                child: SizedBox(
-                  width: 300,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/buyer_home');
-                    }, 
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.all(Colors.transparent),
-                      shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: BorderSide(color: Colors.black))),
-                    ),
-                    child: Text(
-                      "Login",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold
-                      ),
-                    )
-                  ),
+              SizedBox(height: 150),
+              Center(
+                child: Text(
+                  "Login",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
-              SizedBox(height: 10,),
-              Align(
-                alignment: Alignment.center,
-                child: TextButton(
-                  onPressed: () {}, 
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(Colors.transparent),
+              SizedBox(height: 20),
+              TextLabel(text: "Username"),
+              CustomTextField(
+                controller: usernameController,
+                hintText: 'Enter Username',
+                obscureText: false,
+              ),
+              SizedBox(height: 20),
+              TextLabel(text: "Password"),
+              CustomTextField(
+                controller: passwordController,
+                hintText: 'Enter Password',
+                obscureText: true,
+              ),
+              SizedBox(height: 20),
+              Center(
+                child: OutlinedButton(
+                  onPressed:
+                      () => Navigator.pushReplacementNamed(
+                        context,
+                        '/buyer_home',
+                      ),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: Size(300, 30),
+                    backgroundColor: Colors.transparent,
+                    side: BorderSide(color: Colors.black),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
                   child: Text(
-                    "Forgotten Your Password?",
+                    "Login",
                     style: TextStyle(
                       color: Colors.black,
-                      fontWeight: FontWeight.bold
+                      fontWeight: FontWeight.bold,
                     ),
-                  )
+                  ),
                 ),
+              ),
+              SizedBox(height: 10),
+              Align(
+                alignment: Alignment.center,
+                child: CustomTextButton(text: "Forgotten your Password?", bold: true),
               ),
               Align(
                 alignment: Alignment.center,
-                child: TextButton(
+                child: CustomTextButton(
+                  text: "New to Refresh Deals? Create an account!",
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/register');
-                  }, 
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(Colors.transparent),
-                  ),
-                  child: Text(
-                    "New to Refresh Deals? Create an account!",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  )
+                  },
                 ),
               ),
-            ]
+            ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomTextButton extends StatelessWidget {
+  final String text;
+  final VoidCallback? onPressed;
+  final bool bold;
+  const CustomTextButton({
+    super.key,
+    required this.text,
+    this.onPressed,
+    this.bold = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: onPressed ?? () {},
+      style: TextButton.styleFrom(
+        backgroundColor: Colors.transparent,
+        visualDensity: VisualDensity(
+          horizontal: VisualDensity.minimumDensity,
+          vertical: VisualDensity.minimumDensity,
+        ),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: bold ? FontWeight.bold : FontWeight.normal,
         ),
       ),
     );
