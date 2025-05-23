@@ -4,7 +4,12 @@ class Background extends StatelessWidget {
   final Widget child;
   final String imagePath;
   final double padding;
-  const Background({super.key, required this.child, this.imagePath = "images/authentication_bg.jpg", this.padding = 0});
+  const Background({
+    super.key,
+    required this.child,
+    this.imagePath = "images/authentication_bg.jpg",
+    this.padding = 0,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +22,13 @@ class Background extends StatelessWidget {
         image: DecorationImage(
           image: AssetImage(imagePath),
           fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            Color.fromRGBO(255, 255, 255, 1.0),
-            BlendMode.softLight,
-          ),
+          colorFilter:
+              imagePath != "images/authentication_bg.jpg"
+                  ? ColorFilter.mode(
+                    Color.fromRGBO(255, 255, 255, 1.0),
+                    BlendMode.softLight,
+                  )
+                  : null,
         ),
       ),
       padding: EdgeInsets.all(padding),
