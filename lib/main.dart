@@ -7,6 +7,8 @@ import 'pages/buyer_shop.dart';
 import 'pages/profile.dart';
 import 'pages/buyer_product.dart';
 
+import 'pages/shop_home.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -22,14 +24,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: LoginPage(),
+      home: ShopHomePage(),
       routes: {
         '/login': (context) => LoginPage(),
         '/register': (context) => SignupPage(),
-        '/buyer_product': (context) => BuyerProduct(),
+        '/buyer_product': (context) => BuyerProductPage(),
         '/buyer_home': (context) => BuyerHomepage(),
         '/buyer_shop': (context) => BuyerShopPage(),
         '/profile': (context) => Profile(),
+        '/shop_home': (context) => ShopHomePage(),
       },
     );
   }

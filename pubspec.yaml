@@ -33,6 +33,7 @@ flutter:
     - images/cabbage.png
     - images/muffin.png
     - images/orange.png
+    - images/graph.png
 
   # fonts:
   #   - family: Schyler
