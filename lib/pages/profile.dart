@@ -3,6 +3,7 @@ import '../widgets/navigation_bar.dart';
 import '../widgets/text_field.dart';
 import '../widgets/text_label.dart';
 import '../widgets/header.dart';
+import '../widgets/background.dart';
 
 class Profile extends StatelessWidget {
   String accountType;
@@ -40,20 +41,9 @@ class Profile extends StatelessWidget {
 
     return Scaffold(
       bottomNavigationBar: NavBar(accountType: accountType, currentIndex: 2),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/authentication_bg.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Color.fromRGBO(255, 255, 255, 1.0),
-              BlendMode.softLight,
-            ),
-          ),
-        ),
-        padding: const EdgeInsets.all(20.0),
+      body: Background(
+        imagePath: 'images/authentication_bg.jpg',
+        padding: 20.0,
         child: FutureBuilder<String>(
           future: fetchData(),
           builder: (context, snapshot) {

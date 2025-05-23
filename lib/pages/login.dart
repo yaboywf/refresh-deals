@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/text_field.dart';
 import '../widgets/text_label.dart';
 import '../widgets/header.dart';
+import '../widgets/background.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -10,22 +11,8 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
-      body: Container(
-        width: screenSize.width,
-        height: screenSize.height,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/authentication_bg.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Color.fromRGBO(255, 255, 255, 1.0),
-              BlendMode.softLight,
-            ),
-          ),
-        ),
+      body: Background(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
           child: Column(
@@ -81,7 +68,10 @@ class LoginPage extends StatelessWidget {
               SizedBox(height: 10),
               Align(
                 alignment: Alignment.center,
-                child: CustomTextButton(text: "Forgotten your Password?", bold: true),
+                child: CustomTextButton(
+                  text: "Forgotten your Password?",
+                  bold: true,
+                ),
               ),
               Align(
                 alignment: Alignment.center,

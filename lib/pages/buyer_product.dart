@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import '../widgets/navigation_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../widgets/product_quantity_card.dart';
+import '../widgets/background.dart';
 
 class BuyerProductPage extends StatefulWidget {
   String productName;
@@ -56,19 +57,8 @@ class _BuyerProductState extends State<BuyerProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: NavBar(accountType: 'buyer', currentIndex: 1),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/content_bg.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Color.fromRGBO(255, 255, 255, 1.0),
-              BlendMode.softLight,
-            ),
-          ),
-        ),
+      body: Background(
+        imagePath: 'images/content_bg.jpg',
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
