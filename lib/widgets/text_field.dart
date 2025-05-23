@@ -4,12 +4,14 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final bool obscureText;
+  final int? maxLines;
 
   const CustomTextField({
     super.key,
     required this.controller,
     required this.hintText,
     required this.obscureText,
+    this.maxLines,
   });
 
   @override
@@ -17,6 +19,8 @@ class CustomTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: TextField(
+        minLines: maxLines ?? 1,
+        maxLines: null,
         controller: controller,
         obscureText: obscureText,
         cursorColor: Colors.black,

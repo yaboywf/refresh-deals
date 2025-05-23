@@ -24,7 +24,9 @@ class _BuyerProductState extends State<BuyerProductPage> {
     if (args != null &&
         args is Map<String, dynamic> &&
         args.containsKey('productName')) {
-      widget.productName = args['productName'];
+      setState(() {
+        widget.productName = args['productName'];
+      });
     }
 
     fetchRelatedRecipies();

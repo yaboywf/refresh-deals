@@ -8,6 +8,7 @@ import 'pages/profile.dart';
 import 'pages/buyer_product.dart';
 
 import 'pages/shop_home.dart';
+import 'pages/shop_editor.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: ShopHomePage(),
+      home: ShopEditorPage(),
       routes: {
         '/login': (context) => LoginPage(),
         '/register': (context) => SignupPage(),
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         '/buyer_shop': (context) => BuyerShopPage(),
         '/profile': (context) => Profile(),
         '/shop_home': (context) => ShopHomePage(),
+        '/shop_editor': (context) => ShopEditorPage(),
       },
     );
   }
