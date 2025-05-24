@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:project/widgets/dropdown.dart';
-import 'package:project/widgets/text_field.dart';
+import '../widgets/dropdown.dart';
+import '../widgets/product_editor_card.dart';
+import '../widgets/text_field.dart';
 import '../widgets/navigation_bar.dart';
 import '../widgets/background.dart';
 import '../widgets/text_label.dart';
 
-class ShopEditorPage extends StatelessWidget {
+final List<Map<String, dynamic>> quantityList = [
+  {"expiryDate": DateTime(2025, 6, 1, 23, 59, 59), "quantity": 3, "price": 4.0},
+  {"expiryDate": DateTime(2025, 6, 2, 23, 59, 59), "quantity": 2, "price": 2.0},
+  {"expiryDate": DateTime(2025, 6, 3, 23, 59, 59), "quantity": 6, "price": 3.0},
+];
+
+class ShopEditorPage extends StatefulWidget {
   const ShopEditorPage({super.key});
 
+  @override
+  State<ShopEditorPage> createState() => _ShopEditorPageState();
+}
+
+class _ShopEditorPageState extends State<ShopEditorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,12 +96,12 @@ class ShopEditorPage extends StatelessWidget {
                             border: Border.all(color: Colors.black),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                          child: Dropdown(), 
-                        ), 
+                          child: Dropdown(),
+                        ),
                       ],
                     ),
                   ),
-                  SizedBox(width: 10.0), 
+                  SizedBox(width: 10.0),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,10 +130,43 @@ class ShopEditorPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextLabel(text: "Items"),
-                  FaIcon(FontAwesomeIcons.plus, color: Colors.black, size: 18),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        quantityList.add({
+                          "expiryDate": DateTime(2025, 12, 31, 23, 59, 59),
+                        });
+                      });
+                    },
+                    style: TextButton.styleFrom(
+                      shape: CircleBorder(),
+                      visualDensity: VisualDensity.compact,
+                    ),
+                    child: FaIcon(
+                      FontAwesomeIcons.plus,
+                      color: Colors.black,
+                      size: 18,
+                    ),
+                  ),
                 ],
               ),
-              
+              SizedBox(height: 10.0),
+              Column(
+                children: List.generate(
+                  quantityList.length,
+                  (index) => Column(
+                    children: [
+                      ProductEditorCard(
+                        indexKey: index.toString(),
+                        expiryDate: quantityList[index]['expiryDate'],
+                        currentPrice: quantityList[index]['price'],
+                        quantity: quantityList[index]['quantity'],
+                      ),
+                      SizedBox(height: 10.0),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
