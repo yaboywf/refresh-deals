@@ -5,6 +5,7 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
   final int? maxLines;
+  final Color? color;
 
   const CustomTextField({
     super.key,
@@ -12,6 +13,7 @@ class CustomTextField extends StatelessWidget {
     required this.hintText,
     required this.obscureText,
     this.maxLines,
+    this.color,
   });
 
   @override
@@ -33,7 +35,7 @@ class CustomTextField extends StatelessWidget {
             borderSide: BorderSide(color: Colors.black),
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
           ),
-          fillColor: Colors.transparent,
+          fillColor: color ?? Colors.transparent,
           filled: true,
           hintText: hintText,
           hintStyle: TextStyle(fontSize: 14.0, color: Colors.black),

@@ -140,15 +140,13 @@ class _ProductEditorCardState extends State<ProductEditorCard> {
         ),
       ),
       direction: DismissDirection.endToStart,
-      onDismissed: (direction) {
-        print("Dismissed");
-      },
+      onDismissed: (direction) {},
       child: Container(
         padding: const EdgeInsets.all(15.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Color.fromRGBO(255, 255, 255, 0.6),
           shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
           border: Border.all(color: Colors.black, width: 1.0),
         ),
         child: Row(

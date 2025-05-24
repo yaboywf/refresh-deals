@@ -75,6 +75,7 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
               SizedBox(height: 10.0),
               TextLabel(text: "Item Name"),
               CustomTextField(
+                color: Color.fromRGBO(255, 255, 255, 0.6),
                 controller: TextEditingController(),
                 hintText: 'Enter Item Name',
                 obscureText: false,
@@ -92,7 +93,7 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
                           height: 55.0,
                           padding: EdgeInsets.all(10.0),
                           decoration: BoxDecoration(
-                            color: Colors.transparent,
+                            color: Color.fromRGBO(255, 255, 255, 0.6),
                             border: Border.all(color: Colors.black),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -108,6 +109,7 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
                       children: [
                         TextLabel(text: "Original Price"),
                         CustomTextField(
+                          color: Color.fromRGBO(255, 255, 255, 0.6),
                           controller: TextEditingController(),
                           hintText: 'Enter Original Price',
                           obscureText: false,
@@ -120,6 +122,7 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
               SizedBox(height: 10.0),
               TextLabel(text: "Item Description"),
               CustomTextField(
+                color: Color.fromRGBO(255, 255, 255, 0.6),
                 controller: TextEditingController(),
                 hintText: 'Enter Item Description',
                 obscureText: false,
