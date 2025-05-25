@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// A dropdown with custom styling to select a category.
 class Dropdown extends StatefulWidget {
   const Dropdown({super.key});
 

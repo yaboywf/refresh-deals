@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+/// A bottom navigation bar for the app, with two tabs: Home and Shop.
+/// The type of account is determined by [accountType].
+/// The index of the currently selected tab is determined by [currentIndex].
 class NavBar extends StatefulWidget {
   final String accountType;
   final int currentIndex;

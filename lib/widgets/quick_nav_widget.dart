@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+/// A widget that displays a list of quick navigation choices.
+/// Shown in the buyers' home page.
+/// 
+/// The [Choices] widget displays a list of quick navigation choices,
+/// including an icon, color, and text.
 class Choices extends StatelessWidget {
   final IconData icon;
   final Color color;

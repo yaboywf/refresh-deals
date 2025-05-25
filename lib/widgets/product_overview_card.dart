@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// A widget that displays a card for a product in the product listing page.
 class ProductOverviewCard extends StatelessWidget {
   final String image;
   final String name;
@@ -26,6 +27,7 @@ class ProductOverviewCard extends StatelessWidget {
         width: 230,
         child: Stack(
           children: [
+            // The product image
             Container(
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black),
@@ -37,6 +39,7 @@ class ProductOverviewCard extends StatelessWidget {
               ),
             ),
 
+            // The product details
             Positioned(
               left: 0,
               right: 0,
@@ -55,6 +58,7 @@ class ProductOverviewCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // The product name and discount
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -86,6 +90,7 @@ class ProductOverviewCard extends StatelessWidget {
                         ),
                       ],
                     ),
+                    // The store name and address
                     Text(
                       '$storeName | $address',
                       style: TextStyle(color: Colors.black, fontSize: 12),

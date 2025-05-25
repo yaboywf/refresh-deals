@@ -5,6 +5,7 @@ class Header extends StatelessWidget {
     super.key,
   });
 
+  /// Build a header with the project logo.
   @override
   Widget build(BuildContext context) {
     return Container(

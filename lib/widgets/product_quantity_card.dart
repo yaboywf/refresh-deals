@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+/// A widget that displays a card for showing a product's quantity and price
+/// with a timer that counts down from [timerDuration].
+///
+/// The timer is updated every second, and the card is rebuilt every time
+/// the timer's value changes.
+/// 
+/// This is shown in the product editor page.
 class ProductQuantityCard extends StatefulWidget {
   final int timerDuration;
   final double originalPrice;

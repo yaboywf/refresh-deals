@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// A reusable text label widget.
+/// Allows for consistent styling across the app. 
 class TextLabel extends StatelessWidget {
   final String text;
   const TextLabel({super.key, required this.text});

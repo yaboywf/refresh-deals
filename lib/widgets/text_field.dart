@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// A custom text field widget with custom styling.
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;

@@ -3,6 +3,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 
+/// A widget that displays a card for editing a product in the shop editor page.
+///
+/// The card shows the product's name, quantity, price, and expiry date.
+/// The user can tap on the card to edit the product's details.
+///
+/// The [expiryDate], [quantity], and [currentPrice] parameters are used
+/// to prefill the form fields when the card is created.
+/// The [indexKey] parameter is used to identify the card in the list.
 class ProductEditorCard extends StatefulWidget {
   final DateTime? expiryDate;
   final int? quantity;

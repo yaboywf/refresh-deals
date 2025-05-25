@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ProductDetailsCard extends StatelessWidget {
+  // Account type to determine navigation behavior
   String accountType;
+  // Product details to be displayed
   final Map<String, dynamic> product;
 
   ProductDetailsCard({
@@ -12,9 +14,11 @@ class ProductDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Retrieve route arguments, if available
     final arguments =
         ModalRoute.of(context)!.settings.arguments as Map<String, String>?;
 
+    // Override accountType if provided in arguments
     if (arguments != null && arguments.containsKey('accountType')) {
       accountType = arguments['accountType']!;
     }
@@ -22,6 +26,7 @@ class ProductDetailsCard extends StatelessWidget {
     return GestureDetector(
       key: Key(product['id'].toString()),
       onTap: () {
+        // Navigate based on account type
         if (accountType == 'buyer') {
           Navigator.pushReplacementNamed(
             context,
@@ -40,6 +45,7 @@ class ProductDetailsCard extends StatelessWidget {
         ),
         child: Row(
           children: [
+            // Product image
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.asset(
@@ -50,10 +56,12 @@ class ProductDetailsCard extends StatelessWidget {
               ),
             ),
             SizedBox(width: 10),
+            // Product details
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Product name and category
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,6 +87,7 @@ class ProductDetailsCard extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 5),
+                  // Pricing and discount
                   Row(
                     children: [
                       Text(
@@ -107,6 +116,7 @@ class ProductDetailsCard extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 5),
+                  // Stock and expiry information
                   Row(
                     children: [
                       Container(
@@ -140,6 +150,7 @@ class ProductDetailsCard extends StatelessWidget {
                       ),
                     ],
                   ),
+                  // Store information for buyers
                   Column(
                     children: [
                       if (accountType != 'shop') ...[
