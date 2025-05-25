@@ -9,6 +9,8 @@ class SignupPage extends StatelessWidget {
   final TextEditingController newUsernameController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
 
+  /// This page is used to register a new user. 
+  /// It takes in a new username, new password, and an email address.
   @override
   Widget build(BuildContext context) {
     return Scaffold(

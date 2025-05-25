@@ -7,18 +7,26 @@ import '../widgets/product_quantity_card.dart';
 import '../widgets/background.dart';
 
 class BuyerProductPage extends StatefulWidget {
+  // The name of the product being viewed
   String productName;
+
+  // Constructor for BuyerProductPage, initializes with an optional productName
   BuyerProductPage({super.key, this.productName = ''});
 
   @override
+  // Creates the mutable state for this widget
   State<BuyerProductPage> createState() => _BuyerProductState();
 }
 
+// This page displays details about a selected product such as its name, description, price
+// Provides related recipes that can be made with the product.
 class _BuyerProductState extends State<BuyerProductPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
+    // If the user navigated to this page from the product listing page, they
+    // will pass the name of the product they want to view.
     final args = ModalRoute.of(context)?.settings.arguments;
 
     if (args != null &&
@@ -29,14 +37,17 @@ class _BuyerProductState extends State<BuyerProductPage> {
       });
     }
 
+    // Fetch the related recipes for the selected product.
     fetchRelatedRecipies();
   }
 
+  // Fetches the related recipes for the selected product
   Future<List<Map<String, String>>> fetchRelatedRecipies() async {
     final url = 'https://www.themealdb.com/api/json/v1/1/search.php';
     final response = await http.get(Uri.parse('$url?s=${widget.productName}'));
 
     if (response.statusCode == 200) {
+      // Unwrap the JSON data and get the list of recipes
       Map<String, dynamic> data = json.decode(response.body);
       List<dynamic> meals = data['meals'] ?? [];
       List<Map<String, String>> mealDetails =
@@ -49,6 +60,7 @@ class _BuyerProductState extends State<BuyerProductPage> {
 
       return mealDetails;
     } else {
+      // Return an empty list if no recipes were found
       return [
         {"mealName": "", "mealImage": ""},
       ];
@@ -65,6 +77,7 @@ class _BuyerProductState extends State<BuyerProductPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // The background image at the top of the page
               Container(
                 padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
                 width: double.infinity,
@@ -83,6 +96,7 @@ class _BuyerProductState extends State<BuyerProductPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // The back button
                     TextButton.icon(
                       onPressed: () {
                         Navigator.pushReplacementNamed(context, '/product_listings', arguments: {'accountType': 'buyer'});
@@ -103,6 +117,7 @@ class _BuyerProductState extends State<BuyerProductPage> {
                         ),
                       ),
                     ),
+                    // The product name and description
                     Container(
                       width: double.infinity,
                       height: 90,
@@ -169,6 +184,7 @@ class _BuyerProductState extends State<BuyerProductPage> {
                 ),
               ),
               SizedBox(height: 10.0),
+              // The product description
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 10.0),
                 decoration: BoxDecoration(
@@ -203,6 +219,7 @@ class _BuyerProductState extends State<BuyerProductPage> {
                 ),
               ),
               SizedBox(height: 10.0),
+              // The related recipes
               FutureBuilder<List<Map<String, String>>>(
                 future: fetchRelatedRecipies(),
                 builder: (context, snapshot) {
@@ -305,6 +322,7 @@ class _BuyerProductState extends State<BuyerProductPage> {
                 },
               ),
               SizedBox(height: 10.0),
+              // The quantity cards
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 15.0),
                 child: Text(

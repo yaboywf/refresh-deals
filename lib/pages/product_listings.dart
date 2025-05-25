@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/services.dart';
 import '../widgets/navigation_bar.dart';
 import '../widgets/product_details_card.dart';
 import '../widgets/dropdown.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter/services.dart';
+import '../widgets/background.dart';
 
 class ProductListingPage extends StatelessWidget {
+  /// the type of account currently being used
   String accountType;
   ProductListingPage({super.key, this.accountType = 'buyer'});
 
+  /// the controller for the search bar
   final TextEditingController searchController = TextEditingController();
+  /// the controller for the start price text field
   final TextEditingController priceStartController = TextEditingController();
+  /// the controller for the end price text field
   final TextEditingController priceEndController = TextEditingController();
 
+  /// sample list of products to display
   static const List<Map<String, dynamic>> productList = [
     {
       "image": "images/product1.jpg",
@@ -78,6 +84,7 @@ class ProductListingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// if the account type is provided in the route arguments, use it
     final arguments =
         ModalRoute.of(context)!.settings.arguments as Map<String, String>?;
 
@@ -86,22 +93,16 @@ class ProductListingPage extends StatelessWidget {
     }
 
     return Scaffold(
+      /// the bottom navigation bar
       bottomNavigationBar: NavBar(accountType: accountType, currentIndex: 1),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/content_bg.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Color.fromRGBO(255, 255, 255, 1.0),
-              BlendMode.softLight,
-            ),
-          ),
-        ),
-        padding: EdgeInsets.all(20.0),
+      /// the body of the page
+      body: Background(
+        imagePath: 'images/content_bg.jpg',
+        padding: 20.0,
         child: Column(
           children: [
             Container(
+              /// add a bottom border to the search bar
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(color: Colors.black, width: 1.0),
@@ -109,12 +110,14 @@ class ProductListingPage extends StatelessWidget {
               ),
               child: Row(
                 children: [
+                  /// the search bar icon
                   FaIcon(
                     FontAwesomeIcons.magnifyingGlass,
                     color: Colors.black,
                     size: 20.0,
                   ),
                   SizedBox(width: 10.0),
+                  /// the search bar text field
                   Expanded(
                     child: TextField(
                       controller: searchController,
@@ -142,6 +145,7 @@ class ProductListingPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10.0),
                     border: Border.all(color: Colors.black, width: 1.0),
                   ),
+                  /// the dropdown menu for category
                   child: Dropdown(),
                 ),
                 SizedBox(width: 10.0),
@@ -149,6 +153,7 @@ class ProductListingPage extends StatelessWidget {
                   children: [
                     Text('\$', style: TextStyle(fontSize: 16.0)),
                     SizedBox(width: 5.0),
+                    /// the start price text field
                     SizedBox(
                       width: 50.0,
                       child: TextField(
@@ -180,6 +185,7 @@ class ProductListingPage extends StatelessWidget {
                     SizedBox(width: 5.0),
                     Text('to \$', style: TextStyle(fontSize: 16.0)),
                     SizedBox(width: 5.0),
+                    /// the end price text field
                     SizedBox(
                       width: 50.0,
                       child: TextField(

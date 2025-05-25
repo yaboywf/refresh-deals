@@ -32,12 +32,14 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Back button
               TextButton.icon(
                 icon: FaIcon(FontAwesomeIcons.arrowLeft, color: Colors.black), 
                 onPressed:
                     () => Navigator.pushReplacementNamed(context, '/product_listings', arguments: {'accountType': 'shop'}),
                 label: Text("Back", style: TextStyle(color: Colors.black)),
               ),
+              // Product image
               Container(
                 height: 250,
                 width: double.infinity,
@@ -73,6 +75,7 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
                 ),
               ),
               SizedBox(height: 10.0),
+              // Product name
               TextLabel(text: "Item Name"),
               CustomTextField(
                 color: Color.fromRGBO(255, 255, 255, 0.6),
@@ -81,6 +84,7 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
                 obscureText: false,
               ),
               SizedBox(height: 10.0),
+              // Product price
               Row(
                 children: [
                   Expanded(
@@ -120,6 +124,7 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
                 ],
               ),
               SizedBox(height: 10.0),
+              // Product description
               TextLabel(text: "Item Description"),
               CustomTextField(
                 color: Color.fromRGBO(255, 255, 255, 0.6),
@@ -129,6 +134,7 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
                 maxLines: 5,
               ),
               SizedBox(height: 10.0),
+              // Product quantity
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -154,6 +160,7 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
                 ],
               ),
               SizedBox(height: 10.0),
+              // Product quantity list
               Column(
                 children: List.generate(
                   quantityList.length,

@@ -8,6 +8,7 @@ import '../widgets/background.dart';
 class BuyerHomepage extends StatelessWidget {
   BuyerHomepage({super.key});
 
+  /// List of categories that the user can search by
   final choicesList = List<Map>.from([
     {
       "icon": FontAwesomeIcons.carrot,
@@ -36,6 +37,7 @@ class BuyerHomepage extends StatelessWidget {
     },
   ]);
 
+  /// Sample list of recommended products
   final recommendationList = List<Map>.from([
     {
       "image": "images/bread.webp",
@@ -60,6 +62,7 @@ class BuyerHomepage extends StatelessWidget {
     },
   ]);
 
+  /// Sample list of top deals
   final topDealsList = List<Map>.from([
     {
       "image": "images/cabbage.png",
@@ -96,6 +99,7 @@ class BuyerHomepage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              /// User's greeting
               Container(
                 padding: const EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
@@ -157,6 +161,7 @@ class BuyerHomepage extends StatelessWidget {
                   ],
                 ),
               ),
+              /// Categories
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 0.0),
                 child: Wrap(
@@ -173,6 +178,7 @@ class BuyerHomepage extends StatelessWidget {
                   }),
                 ),
               ),
+              /// Recommended products
               Text(
                 "Recommended by Us",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -200,6 +206,7 @@ class BuyerHomepage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20.0),
+              /// Top deals
               Text(
                 "Top Deals",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

@@ -6,14 +6,21 @@ import '../widgets/header.dart';
 import '../widgets/background.dart';
 
 class ProfilePage extends StatelessWidget {
+  /// The type of account to show.
   String accountType;
   ProfilePage({super.key, this.accountType = 'buyer'});
 
+  /// Fetches some data (with a delay) and returns a string.
+  ///
+  /// This is just a placeholder for some actual data fetching.
   Future<String> fetchData() async {
     await Future.delayed(const Duration(seconds: 2));
     return "Data has been fetched!";
   }
 
+  /// Fetches some data (with a delay) and returns a string, but throws an exception.
+  ///
+  /// This is just a placeholder for some actual data fetching.
   Future<String> fetchDataWithError() async {
     await Future.delayed(const Duration(seconds: 2));
     throw Exception(
@@ -21,6 +28,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  /// The text controllers for the fields.
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -32,21 +40,27 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// Get the arguments passed from the previous screen.
     final arguments =
         ModalRoute.of(context)!.settings.arguments as Map<String, String>?;
 
+    /// If the account type is not specified, use the one passed in the arguments.
     if (arguments != null && arguments.containsKey('accountType')) {
       accountType = arguments['accountType']!;
     }
 
     return Scaffold(
+      /// The navigation bar at the bottom.
       bottomNavigationBar: NavBar(accountType: accountType, currentIndex: 2),
       body: Background(
+        /// The background image.
         imagePath: 'images/authentication_bg.jpg',
         padding: 20.0,
         child: FutureBuilder<String>(
+          /// The future to fetch the data.
           future: fetchData(),
           builder: (context, snapshot) {
+            /// If the future is still waiting, show a loading indicator.
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Column(
                 children: [
@@ -65,6 +79,7 @@ class ProfilePage extends StatelessWidget {
                 ],
               );
             } else if (snapshot.hasError) {
+              /// If the future has an error, show an error message.
               return Column(
                 children: [
                   Header(),
@@ -108,6 +123,7 @@ class ProfilePage extends StatelessWidget {
                 ],
               );
             } else {
+              /// If the future has data, show the form.
               return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
@@ -195,6 +211,10 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
+/// A custom button that is styled to have a border around it.
+/// The [text] parameter is the text that will be displayed on the button.
+/// The [onPressed] parameter is an optional callback that will be called
+/// when the button is pressed.
 class BorderButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -203,15 +223,23 @@ class BorderButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
+      /// The callback that will be called when the button is pressed.
       onPressed: onPressed ?? () {},
+      /// The style for the button.
       style: OutlinedButton.styleFrom(
+        /// The minimum size for the button.
         minimumSize: Size(80, 0),
+        /// The shape of the button.
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        /// The border of the button.
         side: BorderSide(color: Colors.black),
+        /// The padding for the button.
         padding: EdgeInsets.all(3.0),
       ),
+      /// The text that will be displayed on the button.
       child: Text(
         text,
+        /// The style for the text.
         style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       ),
     );

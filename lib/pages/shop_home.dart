@@ -10,15 +10,21 @@ class ShopHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // navbar
       bottomNavigationBar: NavBar(accountType: 'shop', currentIndex: 0),
+
+      // background
       body: Background(
         padding: 20.0,
         imagePath: 'images/content_bg.jpg',
         child: SingleChildScrollView(
+          // header
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Header(),
+
+              // welcome message
               Container(
                 padding: EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
@@ -50,6 +56,8 @@ class ShopHomePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 15),
+
+              // quick overview
               Text(
                 "Quick Overview",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -59,23 +67,30 @@ class ShopHomePage extends StatelessWidget {
                 children: [
                   OverviewCard(title: "Expiring Soon", data: "14"),
                   Spacer(),
-                  OverviewCard(title: "Average Discount", data: "18%"), 
+                  OverviewCard(title: "Average Discount", data: "18%"),
                 ],
               ),
               SizedBox(height: 15),
+
+              // items expiring
               Text(
                 "Items Expiring",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
+              SizedBox(height: 15),
               Image.asset("images/graph.png"),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   DataCard(title: "From Yesterday", data: 75, type: "decrease"),
-                  DataCard(title: "From 3 Days Ago", data: 0, type: "maintain"), 
-                  DataCard(title: "From 5 Days Ago", data: 33, type: "decrease"),
+                  DataCard(title: "From 3 Days Ago", data: 0, type: "maintain"),
+                  DataCard(
+                    title: "From 5 Days Ago",
+                    data: 33,
+                    type: "decrease",
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -84,6 +99,7 @@ class ShopHomePage extends StatelessWidget {
   }
 }
 
+// Custom widget for statistics display
 class DataCard extends StatelessWidget {
   final String title;
   final int data;
@@ -95,23 +111,18 @@ class DataCard extends StatelessWidget {
     required this.data,
     required this.type,
   }) : assert(
-    type == 'increase' || type == 'decrease' || type == 'maintain',
-    'Type must be "increase", "decrease", or "maintain"',
-  );
+         type == 'increase' || type == 'decrease' || type == 'maintain',
+         'Type must be "increase", "decrease", or "maintain"',
+       );
 
+  // Define trend icons and colors based on type
   final trendIcon = {
-    'increase': {
-      'icon': FontAwesomeIcons.arrowTrendUp,
-      'color': Colors.red,
-    },
+    'increase': {'icon': FontAwesomeIcons.arrowTrendUp, 'color': Colors.red},
     'decrease': {
       'icon': FontAwesomeIcons.arrowTrendDown,
       'color': Colors.green,
     },
-    'maintain': {
-      'icon': FontAwesomeIcons.arrowRight,
-      'color': Colors.black,
-    },
+    'maintain': {'icon': FontAwesomeIcons.arrowRight, 'color': Colors.black},
   };
 
   @override
@@ -121,15 +132,34 @@ class DataCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          FaIcon(trendIcon[type]!['icon'] as IconData, color: trendIcon[type]!['color'] as Color),
-          Text('$data%', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35, color: trendIcon[type]!['color'] as Color)),
-          Center(child: Text(title, style: TextStyle(fontSize: 11, color: trendIcon[type]!['color'] as Color))),
+          FaIcon(
+            trendIcon[type]!['icon'] as IconData,
+            color: trendIcon[type]!['color'] as Color,
+          ),
+          Text(
+            '$data%',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 35,
+              color: trendIcon[type]!['color'] as Color,
+            ),
+          ),
+          Center(
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 11,
+                color: trendIcon[type]!['color'] as Color,
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
+// Custom widget for quick overview display
 class OverviewCard extends StatelessWidget {
   final String title;
   final String data;
