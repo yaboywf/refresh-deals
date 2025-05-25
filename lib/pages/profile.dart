@@ -5,6 +5,7 @@ import '../widgets/text_label.dart';
 import '../widgets/header.dart';
 import '../widgets/background.dart';
 
+// ignore: must_be_immutable
 class ProfilePage extends StatelessWidget {
   /// The type of account to show.
   String accountType;

@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../widgets/product_quantity_card.dart';
 import '../widgets/background.dart';
 
+// ignore: must_be_immutable
 class BuyerProductPage extends StatefulWidget {
   // The name of the product being viewed
   String productName;

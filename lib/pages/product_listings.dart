@@ -6,6 +6,7 @@ import '../widgets/product_details_card.dart';
 import '../widgets/dropdown.dart';
 import '../widgets/background.dart';
 
+// ignore: must_be_immutable
 class ProductListingPage extends StatelessWidget {
   /// the type of account currently being used
   String accountType;

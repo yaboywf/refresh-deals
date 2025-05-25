@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
-
 /// A widget that provides a background image for its child widget.
 /// 
 /// The [Background] widget displays an image behind its child widget,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class ProductDetailsCard extends StatelessWidget {
   // Account type to determine navigation behavior
   String accountType;
