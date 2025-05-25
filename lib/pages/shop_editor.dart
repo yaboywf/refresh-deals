@@ -33,9 +33,9 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextButton.icon(
-                icon: FaIcon(FontAwesomeIcons.arrowLeft, color: Colors.black),
+                icon: FaIcon(FontAwesomeIcons.arrowLeft, color: Colors.black), 
                 onPressed:
-                    () => Navigator.pushReplacementNamed(context, '/shop_home'),
+                    () => Navigator.pushReplacementNamed(context, '/product_listings', arguments: {'accountType': 'shop'}),
                 label: Text("Back", style: TextStyle(color: Colors.black)),
               ),
               Container(
@@ -56,7 +56,7 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
                       child: OutlinedButton(
                         onPressed: () {},
                         style: OutlinedButton.styleFrom(
-                          backgroundColor: Colors.white,
+                          backgroundColor: Colors.grey,
                           shape: CircleBorder(),
                           padding: EdgeInsets.all(15.0),
                           alignment: Alignment.center,

@@ -1,29 +1,37 @@
 import 'package:flutter/material.dart';
 
 class ProductDetailsCard extends StatelessWidget {
+  String accountType;
   final Map<String, dynamic> product;
 
-  const ProductDetailsCard({super.key, required this.product});
+  ProductDetailsCard({
+    super.key,
+    required this.product,
+    this.accountType = 'buyer',
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
+    final arguments =
+        ModalRoute.of(context)!.settings.arguments as Map<String, String>?;
+
+    if (arguments != null && arguments.containsKey('accountType')) {
+      accountType = arguments['accountType']!;
+    }
+
+    return GestureDetector(
       key: Key(product['id'].toString()),
-      direction: DismissDirection.endToStart,
-      onDismissed: (direction) {
-        Navigator.pushReplacementNamed(context, "/buyer_product", arguments: {'productName': product['name']});
+      onTap: () {
+        if (accountType == 'buyer') {
+          Navigator.pushReplacementNamed(
+            context,
+            "/buyer_product",
+            arguments: {'productName': product['name']},
+          );
+        } else {
+          Navigator.pushReplacementNamed(context, "/shop_editor");
+        }
       },
-      background: Container(
-        alignment: Alignment.centerRight,
-        color: Colors.grey,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Icon(
-            Icons.arrow_forward,
-            color: Colors.white,
-          ),
-        ),
-      ),
       child: Container(
         padding: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
@@ -132,13 +140,19 @@ class ProductDetailsCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 5),
-                  Text(
-                    "Store A | 123 Maple Street",
-                    style: TextStyle(
-                      fontSize: 12,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                  Column(
+                    children: [
+                      if (accountType != 'shop') ...[
+                        SizedBox(height: 5),
+                        Text(
+                          "Store A | 123 Maple Street",
+                          style: TextStyle(
+                            fontSize: 12,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ]
+                    ],
                   ),
                 ],
               ),

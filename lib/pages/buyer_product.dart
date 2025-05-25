@@ -85,7 +85,7 @@ class _BuyerProductState extends State<BuyerProductPage> {
                   children: [
                     TextButton.icon(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/buyer_shop');
+                        Navigator.pushReplacementNamed(context, '/product_listings', arguments: {'accountType': 'buyer'});
                       },
                       style: ButtonStyle(
                         padding: WidgetStatePropertyAll(

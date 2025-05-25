@@ -17,7 +17,8 @@ class _NavigationBarState extends State<NavBar> {
     {
       'icon': FontAwesomeIcons.cartShopping,
       'label': 'Shop',
-      'route': '/buyer_shop',
+      'route': '/product_listings',
+      "args": "accountType=buyer",
     },
     {
       'icon': FontAwesomeIcons.solidUser,
@@ -28,7 +29,12 @@ class _NavigationBarState extends State<NavBar> {
 
   static const sellerNavData = [
     {'icon': FontAwesomeIcons.house, 'label': 'Home', 'route': '/shop_home'},
-    {'icon': FontAwesomeIcons.boxesStacked, 'label': 'Inventory'},
+    {
+      'icon': FontAwesomeIcons.boxesStacked,
+      'label': 'Inventory',
+      'route': '/product_listings',
+      "args": "accountType=shop",
+    },
     {
       'icon': FontAwesomeIcons.solidUser,
       'label': 'Profile',
@@ -39,7 +45,8 @@ class _NavigationBarState extends State<NavBar> {
 
   @override
   Widget build(BuildContext context) {
-    final navData = widget.accountType == 'buyer' ? buyerNavData : sellerNavData;
+    final navData =
+        widget.accountType == 'buyer' ? buyerNavData : sellerNavData;
 
     return BottomNavigationBar(
       backgroundColor: Colors.grey.shade200,
@@ -48,9 +55,13 @@ class _NavigationBarState extends State<NavBar> {
         Navigator.pushReplacementNamed(
           context,
           navData[index]['route'] as String,
-          arguments: navData[index].containsKey('args')
-            ? {(navData[index]['args'] as String).split('=')[0]: (navData[index]['args'] as String).split('=')[1]}
-            : null,
+          arguments:
+              navData[index].containsKey('args')
+                  ? {
+                    (navData[index]['args'] as String).split('=')[0]:
+                        (navData[index]['args'] as String).split('=')[1],
+                  }
+                  : null,
         );
       },
       type: BottomNavigationBarType.fixed,

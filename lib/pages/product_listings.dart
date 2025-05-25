@@ -5,8 +5,9 @@ import '../widgets/dropdown.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/services.dart';
 
-class BuyerShopPage extends StatelessWidget {
-  BuyerShopPage({super.key});
+class ProductListingPage extends StatelessWidget {
+  String accountType;
+  ProductListingPage({super.key, this.accountType = 'buyer'});
 
   final TextEditingController searchController = TextEditingController();
   final TextEditingController priceStartController = TextEditingController();
@@ -77,8 +78,15 @@ class BuyerShopPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final arguments =
+        ModalRoute.of(context)!.settings.arguments as Map<String, String>?;
+
+    if (arguments != null && arguments.containsKey('accountType')) {
+      accountType = arguments['accountType']!;
+    }
+
     return Scaffold(
-      bottomNavigationBar: NavBar(accountType: 'buyer', currentIndex: 1),
+      bottomNavigationBar: NavBar(accountType: accountType, currentIndex: 1),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -210,7 +218,7 @@ class BuyerShopPage extends StatelessWidget {
                 itemCount: productList.length,
                 itemBuilder:
                     (context, index) => Column(
-                      children: [ProductDetailsCard(product: productList[index]), SizedBox(height: 10.0)],
+                      children: [ProductDetailsCard(key: Key(index.toString()), accountType: accountType, product: productList[index]), SizedBox(height: 10.0)],
                     ),
               ),
             ),

@@ -5,9 +5,9 @@ import '../widgets/text_label.dart';
 import '../widgets/header.dart';
 import '../widgets/background.dart';
 
-class Profile extends StatelessWidget {
+class ProfilePage extends StatelessWidget {
   String accountType;
-  Profile({super.key, this.accountType = 'buyer'});
+  ProfilePage({super.key, this.accountType = 'buyer'});
 
   Future<String> fetchData() async {
     await Future.delayed(const Duration(seconds: 2));

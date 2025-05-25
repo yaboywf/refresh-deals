@@ -22,7 +22,7 @@ class CustomTextField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: TextField(
         minLines: maxLines ?? 1,
-        maxLines: null,
+        maxLines: obscureText ? 1 : null,
         controller: controller,
         obscureText: obscureText,
         cursorColor: Colors.black,
