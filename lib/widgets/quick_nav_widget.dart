@@ -17,7 +17,7 @@ class Choices extends StatelessWidget {
     return SizedBox(
       width: 100.0,
       child: TextButton(
-        onPressed: () {},
+        onPressed: () => Navigator.pushReplacementNamed(context, '/product_listings'),
         child: Column(
           children: [
             Container(

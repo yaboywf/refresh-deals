@@ -207,6 +207,7 @@ class BuyerHomepage extends StatelessWidget {
                         discount: recommendationList[itemIndex]["discount"],
                         storeName: recommendationList[itemIndex]["storeName"],
                         address: recommendationList[itemIndex]["address"],
+                        onTap: () => Navigator.pushNamed(context, '/buyer_product'),
                       );
                     } else {
                       return SizedBox(width: 10.0);
@@ -234,6 +235,7 @@ class BuyerHomepage extends StatelessWidget {
                         discount: topDealsList[itemIndex]["discount"],
                         storeName: topDealsList[itemIndex]["storeName"],
                         address: topDealsList[itemIndex]["address"],
+                        onTap: () => Navigator.pushNamed(context, '/buyer_product'),
                       );
                     } else {
                       return SizedBox(width: 10.0);
