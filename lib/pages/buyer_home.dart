@@ -7,7 +7,7 @@ import '../widgets/background.dart';
 
 /// Homepage for buyers
 /// Shown when the user is logged in
-/// 
+///
 /// Contains:
 /// - Quick navigation choices
 /// - Recommended Products (by system)
@@ -95,6 +95,16 @@ class BuyerHomepage extends StatelessWidget {
     },
   ]);
 
+  Future<List<Map>> fetchRecommendedProducts() async {
+    await Future.delayed(const Duration(seconds: 2));
+    return recommendationList;
+  }
+
+  Future<List<Map>> fetchTopDeals() async {
+    await Future.delayed(const Duration(seconds: 2));
+    return topDealsList;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -169,6 +179,7 @@ class BuyerHomepage extends StatelessWidget {
                   ],
                 ),
               ),
+
               /// Categories
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 0.0),
@@ -186,6 +197,7 @@ class BuyerHomepage extends StatelessWidget {
                   }),
                 ),
               ),
+
               /// Recommended products
               Text(
                 "Recommended by Us",
@@ -194,29 +206,57 @@ class BuyerHomepage extends StatelessWidget {
               SizedBox(height: 10.0),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.generate(recommendationList.length * 2 - 1, (
-                    index,
-                  ) {
-                    // Add a space between items
-                    if (index.isEven) {
-                      final itemIndex = index ~/ 2;
-                      return ProductOverviewCard(
-                        image: recommendationList[itemIndex]["image"],
-                        name: recommendationList[itemIndex]["name"],
-                        discount: recommendationList[itemIndex]["discount"],
-                        storeName: recommendationList[itemIndex]["storeName"],
-                        address: recommendationList[itemIndex]["address"],
-                        onTap: () => Navigator.pushNamed(context, '/buyer_product'),
+                child: FutureBuilder<List<Map>>(
+                  future: fetchRecommendedProducts(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(color: Colors.black),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error loading recommendations'),
+                      );
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(
+                        child: Text('No recommendations available'),
                       );
                     } else {
-                      return SizedBox(width: 10.0);
+                      final recommendationList = snapshot.data!;
+                      return Row(
+                        children: List.generate(
+                          recommendationList.length * 2 - 1,
+                          (index) {
+                            // Add a space between items
+                            if (index.isEven) {
+                              final itemIndex = index ~/ 2;
+                              return ProductOverviewCard(
+                                image: recommendationList[itemIndex]["image"],
+                                name: recommendationList[itemIndex]["name"],
+                                discount:
+                                    recommendationList[itemIndex]["discount"],
+                                storeName:
+                                    recommendationList[itemIndex]["storeName"],
+                                address:
+                                    recommendationList[itemIndex]["address"],
+                                onTap:
+                                    () => Navigator.pushNamed(
+                                      context,
+                                      '/buyer_product',
+                                    ),
+                              );
+                            } else {
+                              return SizedBox(width: 10.0);
+                            }
+                          },
+                        ),
+                      );
                     }
-                  }),
+                  },
                 ),
               ),
               SizedBox(height: 20.0),
-              /// Top deals
+              // Top deals
               Text(
                 "Top Deals",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -224,23 +264,50 @@ class BuyerHomepage extends StatelessWidget {
               SizedBox(height: 10.0),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: List.generate(topDealsList.length * 2 - 1, (index) {
-                    if (index.isEven) {
-                      // Add a space between items
-                      final itemIndex = index ~/ 2;
-                      return ProductOverviewCard(
-                        image: topDealsList[itemIndex]["image"],
-                        name: topDealsList[itemIndex]["name"],
-                        discount: topDealsList[itemIndex]["discount"],
-                        storeName: topDealsList[itemIndex]["storeName"],
-                        address: topDealsList[itemIndex]["address"],
-                        onTap: () => Navigator.pushNamed(context, '/buyer_product'),
+                child: FutureBuilder<List<Map>>(
+                  future: fetchTopDeals(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(color: Colors.black),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error loading recommendations'),
+                      );
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(
+                        child: Text('No recommendations available'),
                       );
                     } else {
-                      return SizedBox(width: 10.0);
+                      final topDealsList = snapshot.data!;
+
+                      return Row(
+                        children: List.generate(topDealsList.length * 2 - 1, (
+                          index,
+                        ) {
+                          if (index.isEven) {
+                            // Add a space between items
+                            final itemIndex = index ~/ 2;
+                            return ProductOverviewCard(
+                              image: topDealsList[itemIndex]["image"],
+                              name: topDealsList[itemIndex]["name"],
+                              discount: topDealsList[itemIndex]["discount"],
+                              storeName: topDealsList[itemIndex]["storeName"],
+                              address: topDealsList[itemIndex]["address"],
+                              onTap:
+                                  () => Navigator.pushNamed(
+                                    context,
+                                    '/buyer_product',
+                                  ),
+                            );
+                          } else {
+                            return SizedBox(width: 10.0);
+                          }
+                        }),
+                      );
                     }
-                  }),
+                  },
                 ),
               ),
             ],
