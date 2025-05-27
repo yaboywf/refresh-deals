@@ -8,6 +8,7 @@ import 'pages/register1.dart';
 import 'pages/register2.dart';
 import 'pages/register3.dart';
 import 'pages/register4.dart';
+import 'pages/register5.dart';
 
 import 'pages/buyer_home.dart';
 import 'pages/product_listings.dart';
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         '/register2': (context) => SignupPage2(),
         '/register3': (context) => SignupPage3(),
         '/register4': (context) => SignupPage4(),
+        '/register5': (context) => SignupPage5(),
         '/forget_password1': (context) => ForgetPasswordPage1(),
         '/forget_password2': (context) => ForgetPasswordPage2(),
         '/forget_password3': (context) => ForgetPasswordPage3(),

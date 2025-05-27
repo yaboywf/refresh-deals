@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../widgets/background.dart';
 import '../widgets/header.dart';
 
-class SignupPage4 extends StatefulWidget {
-  const SignupPage4({super.key});
+class SignupPage5 extends StatefulWidget {
+  const SignupPage5({super.key});
 
   @override
-  State<SignupPage4> createState() => _SignupPage4State();
+  State<SignupPage5> createState() => _SignupPage4State();
 }
 
-class _SignupPage4State extends State<SignupPage4> {
+class _SignupPage4State extends State<SignupPage5> {
   @override
   void initState() {
     super.initState();
 
     // Navigate after 3 seconds
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(Duration(seconds: 3), () {
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, '/register5');
+      Navigator.pushReplacementNamed(context, '/login');
     });
   }
 
@@ -33,12 +34,11 @@ class _SignupPage4State extends State<SignupPage4> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset('images/payment.png'),
-                  SizedBox(height: 40),
+                  FaIcon(FontAwesomeIcons.check, color: Colors.black, size: 80),
+                  SizedBox(height: 10),
                   Text(
-                    "Please pay using the QR Code above to use ReFresh Deals",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    "Account Created",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

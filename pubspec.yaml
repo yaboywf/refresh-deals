@@ -14,6 +14,7 @@ dependencies:
   font_awesome_flutter: ^10.0.0
   http: ^1.4.0
   intl: ^0.18.0
+  image_picker: ^0.8.7+4
 
   cupertino_icons: ^1.0.8
 
@@ -27,18 +28,4 @@ flutter:
   uses-material-design: true
 
   assets:
-    - images/authentication_bg.jpg
-    - images/logo.png
-    - images/content_bg.jpg
-    - images/bread.webp
-    - images/cabbage.png
-    - images/muffin.png
-    - images/orange.png
-    - images/graph.png
-
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+    - images/

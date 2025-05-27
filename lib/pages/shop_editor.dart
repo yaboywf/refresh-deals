@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import '../widgets/dropdown.dart';
 import '../widgets/product_editor_card.dart';
 import '../widgets/text_field.dart';
@@ -21,6 +23,20 @@ class ShopEditorPage extends StatefulWidget {
 }
 
 class _ShopEditorPageState extends State<ShopEditorPage> {
+  final ImagePicker picker = ImagePicker();
+  File? image;
+
+  // Function to pick an image
+  Future<void> pickImage() async {
+    final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        image = File(pickedFile.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,9 +50,13 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
             children: [
               // Back button
               TextButton.icon(
-                icon: FaIcon(FontAwesomeIcons.arrowLeft, color: Colors.black), 
+                icon: FaIcon(FontAwesomeIcons.arrowLeft, color: Colors.black),
                 onPressed:
-                    () => Navigator.pushReplacementNamed(context, '/product_listings', arguments: {'accountType': 'shop'}),
+                    () => Navigator.pushReplacementNamed(
+                      context,
+                      '/product_listings',
+                      arguments: {'accountType': 'shop'},
+                    ),
                 label: Text("Back", style: TextStyle(color: Colors.black)),
               ),
               // Product image
@@ -56,7 +76,7 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
                       right: 10,
                       bottom: 10,
                       child: OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () => pickImage(),
                         style: OutlinedButton.styleFrom(
                           backgroundColor: Colors.grey,
                           shape: CircleBorder(),
