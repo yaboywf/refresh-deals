@@ -5,9 +5,17 @@ import '../widgets/quick_nav_widget.dart';
 import '../widgets/product_overview_card.dart';
 import '../widgets/background.dart';
 
+/// Homepage for buyers
+/// Shown when the user is logged in
+/// 
+/// Contains:
+/// - Quick navigation choices
+/// - Recommended Products (by system)
+/// - Top Deals (ranked based on the discount percentage)
 class BuyerHomepage extends StatelessWidget {
   BuyerHomepage({super.key});
 
+  /// List of quick navigation choices
   /// List of categories that the user can search by
   final choicesList = List<Map>.from([
     {
@@ -190,6 +198,7 @@ class BuyerHomepage extends StatelessWidget {
                   children: List.generate(recommendationList.length * 2 - 1, (
                     index,
                   ) {
+                    // Add a space between items
                     if (index.isEven) {
                       final itemIndex = index ~/ 2;
                       return ProductOverviewCard(
@@ -217,6 +226,7 @@ class BuyerHomepage extends StatelessWidget {
                 child: Row(
                   children: List.generate(topDealsList.length * 2 - 1, (index) {
                     if (index.isEven) {
+                      // Add a space between items
                       final itemIndex = index ~/ 2;
                       return ProductOverviewCard(
                         image: topDealsList[itemIndex]["image"],
