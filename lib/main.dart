@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'pages/login.dart';
-import 'pages/register.dart';
+import 'pages/register1.dart';
+import 'pages/register2.dart';
+import 'pages/register3.dart';
+import 'pages/register4.dart';
 
 import 'pages/buyer_home.dart';
 import 'pages/product_listings.dart';
@@ -30,6 +34,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => LoginPage(),
         '/register': (context) => SignupPage(),
+        '/register2': (context) => SignupPage2(),
+        '/register3': (context) => SignupPage3(),
+        '/register4': (context) => SignupPage4(),
         '/buyer_product': (context) => BuyerProductPage(),
         '/buyer_home': (context) => BuyerHomepage(),
         '/product_listings': (context) => ProductListingPage(),

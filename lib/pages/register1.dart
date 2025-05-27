@@ -52,7 +52,7 @@ class SignupPage extends StatelessWidget {
               SizedBox(height: 20),
               Center(
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () => Navigator.pushReplacementNamed(context, '/register2'),
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: Colors.black),
                     backgroundColor: Colors.transparent,
