@@ -38,7 +38,7 @@ class SignupPage2 extends StatelessWidget {
             SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
-              child: CustomOutlinedButton(text: "No"),
+              child: CustomOutlinedButton(text: "No", onPressed: () => Navigator.pushReplacementNamed(context, '/register4'),),
             ),
           ],
         ),

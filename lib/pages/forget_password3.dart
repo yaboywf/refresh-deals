@@ -4,14 +4,13 @@ import '../widgets/text_label.dart';
 import '../widgets/header.dart';
 import '../widgets/background.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+class ForgetPasswordPage3 extends StatelessWidget {
+  ForgetPasswordPage3({super.key});
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    // Scaffold that contains the login page
     return Scaffold(
       body: Background(
         child: Padding(
@@ -22,24 +21,23 @@ class LoginPage extends StatelessWidget {
             children: [
               Header(),
               SizedBox(height: 150),
-              // Centered text that says "Login"
               Center(
                 child: Text(
-                  "Login",
+                  "Change Password",
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(height: 20),
-              TextLabel(text: "Username"),
-              // Text field for the user to enter their username
+              TextLabel(text: "New Password"),
+              // Text field for the user to enter their new password
               CustomTextField(
                 controller: usernameController,
-                hintText: 'Enter Username',
+                hintText: 'Enter Password',
                 obscureText: false,
               ),
               SizedBox(height: 20),
-              TextLabel(text: "Password"),
-              // Text field for the user to enter their password
+              TextLabel(text: "Re-enter Password"),
+              // Text field for the user to re-enter their new password
               CustomTextField(
                 controller: passwordController,
                 hintText: 'Enter Password',
@@ -47,15 +45,10 @@ class LoginPage extends StatelessWidget {
                 maxLines: 1,
               ),
               SizedBox(height: 20),
-              // Centered button that says "Login"
               Center(
                 child: OutlinedButton(
                   onPressed:
-                      () => Navigator.pushReplacementNamed(
-                        context,
-                        // If the username is "shop", navigate to the shop home page
-                        usernameController.text == "shop" ? '/shop_home' : '/buyer_home',
-                      ),
+                      () => Navigator.pushReplacementNamed(context, '/login'),
                   style: OutlinedButton.styleFrom(
                     minimumSize: Size(300, 30),
                     backgroundColor: Colors.transparent,
@@ -65,32 +58,12 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    "Login",
+                    "Finish",
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-              ),
-              SizedBox(height: 10),
-              // Centered text that says "Forgotten your Password?"
-              Align(
-                alignment: Alignment.center,
-                child: CustomTextButton(
-                  text: "Forgotten your Password?",
-                  bold: true,
-                  onPressed: () => Navigator.pushReplacementNamed(context, '/forget_password1'),
-                ),
-              ),
-              // Centered text that says "New to Refresh Deals? Create an account!" and navigates to the register page when pressed
-              Align(
-                alignment: Alignment.center,
-                child: CustomTextButton(
-                  text: "New to Refresh Deals? Create an account!",
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/register');
-                  },
                 ),
               ),
             ],
