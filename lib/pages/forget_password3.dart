@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
-import '../widgets/text_field.dart';
 import '../widgets/text_label.dart';
 import '../widgets/header.dart';
 import '../widgets/background.dart';
 
-class ForgetPasswordPage3 extends StatelessWidget {
-  ForgetPasswordPage3({super.key});
-  final TextEditingController usernameController = TextEditingController();
+class ForgetPasswordPage3 extends StatefulWidget {
+  const ForgetPasswordPage3({super.key});
+
+  @override
+  State<ForgetPasswordPage3> createState() => _ForgetPasswordPage3State();
+}
+
+class _ForgetPasswordPage3State extends State<ForgetPasswordPage3> {
+  final formKey = GlobalKey<FormState>();
   final TextEditingController passwordController = TextEditingController();
+  String? password;
+  String? confirmPassword;
 
   @override
   Widget build(BuildContext context) {
@@ -28,42 +35,137 @@ class ForgetPasswordPage3 extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              TextLabel(text: "New Password"),
-              // Text field for the user to enter their new password
-              CustomTextField(
-                controller: usernameController,
-                hintText: 'Enter Password',
-                obscureText: false,
-              ),
-              SizedBox(height: 20),
-              TextLabel(text: "Re-enter Password"),
-              // Text field for the user to re-enter their new password
-              CustomTextField(
-                controller: passwordController,
-                hintText: 'Enter Password',
-                obscureText: true,
-                maxLines: 1,
-              ),
-              SizedBox(height: 20),
-              Center(
-                child: OutlinedButton(
-                  onPressed:
-                      () => Navigator.pushReplacementNamed(context, '/login'),
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: Size(300, 30),
-                    backgroundColor: Colors.transparent,
-                    side: BorderSide(color: Colors.black),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+              Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextLabel(text: "New Password"),
+                    // Text field for the user to enter their new password
+                    TextFormField(
+                      controller: passwordController,
+                      keyboardType: TextInputType.emailAddress,
+                      cursorColor: Colors.black,
+                      onSaved: (value) => password = value,
+                      // If the username is invalid, show an error message
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a password';
+                        }
+                        return null; // valid
+                      },
+                      decoration: InputDecoration(
+                        errorStyle: TextStyle(color: Colors.red),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        fillColor: Colors.transparent,
+                        filled: true,
+                        hintText: 'Enter Password',
+                        hintStyle: TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    "Finish",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
+                    SizedBox(height: 20),
+                    TextLabel(text: "Re-enter Password"),
+                    // Text field for the user to re-enter their new password
+                    TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      cursorColor: Colors.black,
+                      onSaved: (value) => confirmPassword = value,
+                      // If the username is invalid, show an error message
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please re-enter your password';
+                        } else if (value != passwordController.text) {
+                          return 'Passwords do not match';
+                        }
+                        return null; // valid
+                      },
+                      decoration: InputDecoration(
+                        errorStyle: TextStyle(color: Colors.red),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black),
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        fillColor: Colors.transparent,
+                        filled: true,
+                        hintText: 'Enter Password',
+                        hintStyle: TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
-                  ),
+                    SizedBox(height: 20),
+                    Center(
+                      child: OutlinedButton(
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            formKey.currentState!.save();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Password changed successfully',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                duration: Duration(seconds: 2),
+                                backgroundColor: Color.fromRGBO(
+                                  233,
+                                  218,
+                                  200,
+                                  1.0,
+                                ),
+                              ),
+                            );
+                            Navigator.pushReplacementNamed(context, '/login');
+                          }
+                        },
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: Size(300, 30),
+                          backgroundColor: Colors.transparent,
+                          side: BorderSide(color: Colors.black),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: Text(
+                          "Finish",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

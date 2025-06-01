@@ -170,7 +170,7 @@ class ProfilePage extends StatelessWidget {
                     ],
                     Align(
                       alignment: Alignment.centerRight,
-                      child: BorderButton(text: "Save",),
+                      child: BorderButton(text: "Save"),
                     ),
                     SizedBox(height: 30),
                     Text(
@@ -196,11 +196,31 @@ class ProfilePage extends StatelessWidget {
                     ),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: BorderButton(text: "Change",),
+                      child: BorderButton(text: "Change"),
                     ),
                     Center(
-                      child: BorderButton(text: "Logout", onPressed: () => Navigator.pushReplacementNamed(context, "/login"),),
-                    )
+                      child: BorderButton(
+                        text: "Logout",
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Logged out successfully!',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              duration: Duration(seconds: 2),
+                              backgroundColor: Color.fromRGBO(
+                                233,
+                                218,
+                                200,
+                                1.0,
+                              ),
+                            ),
+                          );
+                          Navigator.pushReplacementNamed(context, "/login");
+                        },
+                      ),
+                    ),
                   ],
                 ),
               );
@@ -226,20 +246,26 @@ class BorderButton extends StatelessWidget {
     return OutlinedButton(
       /// The callback that will be called when the button is pressed.
       onPressed: onPressed ?? () {},
+
       /// The style for the button.
       style: OutlinedButton.styleFrom(
         /// The minimum size for the button.
         minimumSize: Size(80, 0),
+
         /// The shape of the button.
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+
         /// The border of the button.
         side: BorderSide(color: Colors.black),
+
         /// The padding for the button.
         padding: EdgeInsets.all(3.0),
       ),
+
       /// The text that will be displayed on the button.
       child: Text(
         text,
+
         /// The style for the text.
         style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       ),
