@@ -54,8 +54,8 @@ class ProductListingPage extends StatelessWidget {
       "maxDiscount": "40",
       "expiringQuantity": 3,
       "totalQuantity": 3,
-      "storeName": "Store C",
-      "address": "789 Pine Street",
+      "storeName": "Temasek Polytechnic",
+      "address": "21 Tampines Ave 1, Singapore 529757",
     },
     {
       "image": "images/product4.jpg",

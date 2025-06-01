@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../widgets/navigation_bar.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../widgets/navigation_bar.dart';
 import '../widgets/product_quantity_card.dart';
 import '../widgets/background.dart';
+import '../models/location.dart';
 
 // ignore: must_be_immutable
 class BuyerProductPage extends StatefulWidget {
@@ -22,6 +25,14 @@ class BuyerProductPage extends StatefulWidget {
 // This page displays details about a selected product such as its name, description, price
 // Provides related recipes that can be made with the product.
 class _BuyerProductState extends State<BuyerProductPage> {
+  String distanceText = 'Calculating...';
+
+  @override
+  void initState() {
+    super.initState();
+    getDistanceToStore();
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -68,6 +79,67 @@ class _BuyerProductState extends State<BuyerProductPage> {
     }
   }
 
+  Future<LatLng> getStoreCoordinates(String address) async {
+    final url = Uri.parse(
+      'https://api.opencagedata.com/geocode/v1/json?q=${Uri.encodeComponent(address)}&key=62f43fc7bc6048d58eeb73d464f458c0',
+    );
+
+    final response = await http.get(url);
+    final data = jsonDecode(response.body);
+
+    if (response.statusCode == 200 && data['results'].isNotEmpty) {
+      final result = data['results'][0]['geometry'];
+      return LatLng(result['lat'], result['lng']);
+    } else {
+      throw Exception('Failed to retrieve coordinates');
+    }
+  }
+
+  Future<LatLng> getCurrentLocation() async {
+    if (!kIsWeb) {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        throw Exception('Location services are disabled.');
+      }
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        throw Exception('Location permissions are denied');
+      }
+    }
+
+    final position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    return LatLng(position.latitude, position.longitude);
+  }
+
+  double calculateDistanceMeters(LatLng userPos, LatLng storePos) {
+    return Geolocator.distanceBetween(
+      userPos.lat,
+      userPos.lng,
+      storePos.lat,
+      storePos.lng,
+    );
+  }
+
+  void getDistanceToStore() async {
+    // Get the user's current location
+    // Note: Chrome on web does not allow geolocation. hence a hardcoded location is given.
+
+    final userPos =
+        kIsWeb ? LatLng(1.2839, 103.8606) : await getCurrentLocation();
+    final storeCoords = await getStoreCoordinates("Temasek Polytechnic");
+
+    final distance = calculateDistanceMeters(userPos, storeCoords);
+    final distanceInKm = (distance / 1000).toStringAsFixed(2);
+    setState(() => distanceText = '${distanceInKm}km');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +172,11 @@ class _BuyerProductState extends State<BuyerProductPage> {
                     // The back button
                     TextButton.icon(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/product_listings', arguments: {'accountType': 'buyer'});
+                        Navigator.pushReplacementNamed(
+                          context,
+                          '/product_listings',
+                          arguments: {'accountType': 'buyer'},
+                        );
                       },
                       style: ButtonStyle(
                         padding: WidgetStatePropertyAll(
@@ -164,14 +240,17 @@ class _BuyerProductState extends State<BuyerProductPage> {
                           SizedBox(height: 8.0),
                           Row(
                             children: [
-                              Text("Store A | 123 Maple Street | "),
+                              Text(
+                                "Temasek Polytechnic | 21 Tampines Ave 1 | ",
+                              ),
                               FaIcon(
                                 FontAwesomeIcons.locationDot,
                                 size: 17.0,
                                 color: Colors.grey,
                               ),
                               Text(
-                                " 3.21km",
+                                " $distanceText",
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(color: Colors.grey),
                               ),
                               Spacer(),
