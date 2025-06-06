@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "34765062812",
+    "project_id": "refresh-deals",
+    "storage_bucket": "refresh-deals.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:34765062812:android:05f6f9722eef44c7f3a359",
+        "android_client_info": {
+          "package_name": "com.example.project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAennuwpJhEkt_-1MHudrBTWuRoPog_GYw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

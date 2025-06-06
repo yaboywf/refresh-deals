@@ -1,0 +1,22 @@
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "refresh-deals",
+                    "appId": "1:34765062812:android:05f6f9722eef44c7f3a359",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "refresh-deals",
+                    "configurations": {
+                        "android": "1:34765062812:android:05f6f9722eef44c7f3a359",
+                        "web": "1:34765062812:web:ec43f3dedb24d8bff3a359"
+                    }
+                }
+            }
+        }
+    }
+}
