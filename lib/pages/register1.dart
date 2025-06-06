@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../pages/register2.dart';
 import '../widgets/text_label.dart';
 import '../widgets/header.dart';
 import '../widgets/background.dart';
@@ -84,7 +85,7 @@ class _SignupPageState extends State<SignupPage> {
                     TextFormField(
                       cursorColor: Colors.black,
                       onSaved: (value) => password = value,
-                      // If the username is invalid, show an error message
+                      // If the password is invalid, show an error message
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a password';
@@ -123,13 +124,17 @@ class _SignupPageState extends State<SignupPage> {
                     TextLabel(text: "Email"),
                     TextFormField(
                       cursorColor: Colors.black,
-                      onSaved: (value) => username = value,
-                      // If the username is invalid, show an error message
+                      onSaved: (value) => email = value,
+                      // If the email is invalid, show an error message
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a email';
-                        } else if (!value.contains('@')) {
-                          return 'Please enter a valid email';
+                        } else {
+                          String pattern =
+                              r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+                          RegExp regex = RegExp(pattern);
+
+                          if (!regex.hasMatch(value)) return 'Please enter a valid email';
                         }
                         return null; // valid
                       },
@@ -166,9 +171,16 @@ class _SignupPageState extends State<SignupPage> {
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
                             formKey.currentState!.save();
-                            Navigator.pushReplacementNamed(
+                            Navigator.pushReplacement(
                               context,
-                              '/register2',
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => SignupPage2(
+                                      email: email!,
+                                      password: password!,
+                                      username: username!,
+                                    ),
+                              ),
                             );
                           }
                         },
