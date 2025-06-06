@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import '../services/firebase_service.dart';
 
 import 'pages/forget_password1.dart';
 import 'pages/forget_password2.dart';
@@ -18,7 +22,10 @@ import 'pages/buyer_product.dart';
 import 'pages/shop_home.dart';
 import 'pages/shop_editor.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  GetIt.instance.registerLazySingleton(() => FirebaseService());
   runApp(const MyApp());
 }
 
