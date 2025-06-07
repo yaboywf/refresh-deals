@@ -38,7 +38,7 @@ class _ForgetPasswordPage1State extends State<ForgetPasswordPage1> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextLabel(text: "Email"),
+                    CustomTextLabel(text: "Email"),
                     // Text field for the user to enter their email
                     TextFormField(
                       keyboardType: TextInputType.emailAddress,

@@ -28,7 +28,9 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
 
   // Function to pick an image
   Future<void> pickImage() async {
-    final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
 
     if (pickedFile != null) {
       setState(() {
@@ -96,7 +98,7 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
               ),
               SizedBox(height: 10.0),
               // Product name
-              TextLabel(text: "Item Name"),
+              CustomTextLabel(text: "Item Name"),
               CustomTextField(
                 color: Color.fromRGBO(255, 255, 255, 0.6),
                 controller: TextEditingController(),
@@ -111,7 +113,7 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextLabel(text: "Item Price"),
+                        CustomTextLabel(text: "Item Price"),
                         Container(
                           width: double.infinity,
                           height: 55.0,
@@ -131,7 +133,7 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextLabel(text: "Original Price"),
+                        CustomTextLabel(text: "Original Price"),
                         CustomTextField(
                           color: Color.fromRGBO(255, 255, 255, 0.6),
                           controller: TextEditingController(),
@@ -145,7 +147,7 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
               ),
               SizedBox(height: 10.0),
               // Product description
-              TextLabel(text: "Item Description"),
+              CustomTextLabel(text: "Item Description"),
               CustomTextField(
                 color: Color.fromRGBO(255, 255, 255, 0.6),
                 controller: TextEditingController(),
@@ -158,7 +160,7 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextLabel(text: "Items"),
+                  CustomTextLabel(text: "Items"),
                   TextButton(
                     onPressed: () {
                       setState(() {

@@ -139,14 +139,14 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 20),
-                    TextLabel(text: "Username"),
+                    CustomTextLabel(text: "Username"),
                     CustomTextField(
                       controller: nameController,
                       hintText: "Enter Username",
                       obscureText: false,
                     ),
                     SizedBox(height: 20),
-                    TextLabel(text: "Email"),
+                    CustomTextLabel(text: "Email"),
                     CustomTextField(
                       controller: emailController,
                       hintText: "Enter Email",
@@ -154,14 +154,14 @@ class ProfilePage extends StatelessWidget {
                     ),
                     if (accountType == 'shop') ...[
                       SizedBox(height: 20),
-                      TextLabel(text: "Business Name"),
+                      CustomTextLabel(text: "Business Name"),
                       CustomTextField(
                         controller: storeNameController,
                         hintText: "Enter Business Name",
                         obscureText: false,
                       ),
                       SizedBox(height: 20),
-                      TextLabel(text: "Location"),
+                      CustomTextLabel(text: "Location"),
                       CustomTextField(
                         controller: addressController,
                         hintText: "Enter Store Location",
@@ -181,14 +181,14 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 20),
-                    TextLabel(text: "New Password"),
+                    CustomTextLabel(text: "New Password"),
                     CustomTextField(
                       controller: passwordController,
                       hintText: "Enter Password",
                       obscureText: false,
                     ),
                     SizedBox(height: 20),
-                    TextLabel(text: "Re-enter Password"),
+                    CustomTextLabel(text: "Re-enter Password"),
                     CustomTextField(
                       controller: confirmPasswordController,
                       hintText: "Enter Password",

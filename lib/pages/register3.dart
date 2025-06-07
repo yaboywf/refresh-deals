@@ -46,7 +46,7 @@ class _SignupPage3State extends State<SignupPage3> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextLabel(text: "Business Name"),
+                  CustomTextLabel(text: "Business Name"),
                   // Text field for the user to enter their username
                   TextFormField(
                     cursorColor: Colors.black,
@@ -83,7 +83,7 @@ class _SignupPage3State extends State<SignupPage3> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  TextLabel(text: "Location"),
+                  CustomTextLabel(text: "Location"),
                   // Text field for the user to enter their password
                   TextFormField(
                     cursorColor: Colors.black,

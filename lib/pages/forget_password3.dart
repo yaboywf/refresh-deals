@@ -40,7 +40,7 @@ class _ForgetPasswordPage3State extends State<ForgetPasswordPage3> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextLabel(text: "New Password"),
+                    CustomTextLabel(text: "New Password"),
                     // Text field for the user to enter their new password
                     TextFormField(
                       controller: passwordController,
@@ -82,7 +82,7 @@ class _ForgetPasswordPage3State extends State<ForgetPasswordPage3> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    TextLabel(text: "Re-enter Password"),
+                    CustomTextLabel(text: "Re-enter Password"),
                     // Text field for the user to re-enter their new password
                     TextFormField(
                       keyboardType: TextInputType.emailAddress,
