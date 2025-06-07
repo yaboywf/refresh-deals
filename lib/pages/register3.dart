@@ -1,148 +1,88 @@
 import "package:flutter/material.dart";
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get_it/get_it.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../services/firebase_service.dart';
 import '../widgets/background.dart';
+import '../widgets/snackbar.dart';
 import '../widgets/header.dart';
 import '../widgets/text_label.dart';
+import '../widgets/text_form_field.dart';
+import '../widgets/transparent_outlinedbutton.dart';
 
-class SignupPage3 extends StatefulWidget {
-  const SignupPage3({super.key});
+// ignore: must_be_immutable
+class SignupPage3 extends StatelessWidget {
+  final String email;
+  final String password;
+  final String username;
+  SignupPage3({super.key, this.email = '', this.password = '', this.username = ''});
 
-  @override
-  State<SignupPage3> createState() => _SignupPage3State();
-}
-
-class _SignupPage3State extends State<SignupPage3> {
   final formKey = GlobalKey<FormState>();
-  String? location;
-  String? businessName;
+  FirebaseService fbService = GetIt.instance<FirebaseService>();
+  final TextEditingController locationController = TextEditingController();
+  final TextEditingController businessNameController = TextEditingController();
+
+  void registerShop(BuildContext context) async {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+      try {
+        UserCredential userCredential = await fbService.register(email, password);
+        User? user = userCredential.user;
+        if (user != null) {
+          await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+            'username': username,
+            'accountType': 'shop',
+            'location': locationController.text,
+            'businessName': businessNameController.text,
+          });
+        }
+
+        if (!context.mounted) return;
+        Navigator.pushNamedAndRemoveUntil(context, "/register4", (Route<dynamic> route) => false);
+      } on FirebaseAuthException catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(text: e.code, color: Colors.red, textColor: Colors.white));
+      } catch (e) {
+        debugPrint("An unknown error occurred: $e");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: Header(),
       body: Background(
-        imagePath: "images/authentication_bg.jpg",
         padding: 20,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Header(),
+            SizedBox(height: 80),
             TextButton.icon(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/register2');
-              },
+              onPressed: () => Navigator.pop(context),
               icon: FaIcon(FontAwesomeIcons.arrowLeft, color: Colors.black),
-              label: Text(
-                "Back",
-                style: TextStyle(color: Colors.black, fontSize: 17),
-              ),
+              label: Text("Back", style: TextStyle(color: Colors.black, fontSize: 17)),
             ),
-            Text(
-              "Just a few more questions",
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-            ),
+            Text("Just a few more questions", style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
             Form(
               key: formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Text field for the user to enter their business name
                   CustomTextLabel(text: "Business Name"),
-                  // Text field for the user to enter their username
-                  TextFormField(
-                    cursorColor: Colors.black,
-                    onSaved: (value) => businessName = value,
-                    // If the username is invalid, show an error message
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your business name';
-                      }
-                      return null; // valid
-                    },
-                    decoration: InputDecoration(
-                      errorStyle: TextStyle(color: Colors.red),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      fillColor: Colors.transparent,
-                      filled: true,
-                      hintText: 'Enter Business Name',
-                      hintStyle: TextStyle(fontSize: 14.0, color: Colors.black),
-                    ),
-                  ),
+                  CustomTextFormField(controller: businessNameController, hintText: 'Business Name'),
                   SizedBox(height: 20),
+                  // Text field for the user to enter their location
                   CustomTextLabel(text: "Location"),
-                  // Text field for the user to enter their password
-                  TextFormField(
-                    cursorColor: Colors.black,
-                    onSaved: (value) => location = value,
-                    // If the username is invalid, show an error message
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a location';
-                      }
-                      return null; // valid
-                    },
-                    decoration: InputDecoration(
-                      errorStyle: TextStyle(color: Colors.red),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      fillColor: Colors.transparent,
-                      filled: true,
-                      hintText: 'Enter Location',
-                      hintStyle: TextStyle(fontSize: 14.0, color: Colors.black),
-                    ),
-                  ),
+                  CustomTextFormField(controller: locationController, hintText: 'Location'),
                   SizedBox(height: 20),
                   Center(
-                    child: OutlinedButton(
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          formKey.currentState!.save();
-                          Navigator.pushReplacementNamed(context, '/register4');
-                        }
-                      },
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: Size(300, 30),
-                        backgroundColor: Colors.transparent,
-                        side: BorderSide(color: Colors.black),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      child: Text(
-                        "Create",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                    child: TransparentOutlinedbutton(
+                      onPressed: () => registerShop(context),
+                      text: "Create",
                     ),
                   ),
                 ],

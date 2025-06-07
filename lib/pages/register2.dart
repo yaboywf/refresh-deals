@@ -8,6 +8,7 @@ import '../widgets/header.dart';
 import '../widgets/background.dart';
 import '../widgets/snackbar.dart';
 import '../widgets/transparent_outlinedbutton.dart';
+import '../pages/register3.dart';
 
 // ignore: must_be_immutable
 class SignupPage2 extends StatelessWidget {
@@ -58,7 +59,7 @@ class SignupPage2 extends StatelessWidget {
                 onPressed:
                     () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SignupPage2(email: email, password: password, username: username)),
+                      MaterialPageRoute(builder: (context) => SignupPage3(email: email, password: password, username: username)),
                     ),
               ),
             ),
