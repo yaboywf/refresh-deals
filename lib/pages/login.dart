@@ -93,7 +93,6 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            SizedBox(height: 10),
             // Button for forget password
             CustomTextButton(
               text: "Forgotten your Password?",
