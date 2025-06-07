@@ -6,7 +6,6 @@ import '../services/firebase_service.dart';
 
 import 'pages/forget_password1.dart';
 import 'pages/forget_password2.dart';
-import 'pages/forget_password3.dart';
 import 'pages/login.dart';
 import 'pages/register1.dart';
 import 'pages/register2.dart';
@@ -51,7 +50,6 @@ class MyApp extends StatelessWidget {
         '/register5': (context) => SignupPage5(),
         '/forget_password1': (context) => ForgetPasswordPage1(),
         '/forget_password2': (context) => ForgetPasswordPage2(),
-        '/forget_password3': (context) => ForgetPasswordPage3(),
         '/buyer_product': (context) => BuyerProductPage(),
         '/buyer_home': (context) => BuyerHomepage(),
         '/product_listings': (context) => ProductListingPage(),
