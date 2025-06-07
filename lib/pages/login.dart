@@ -9,6 +9,8 @@ import '../widgets/text_form_field.dart';
 import '../widgets/header.dart';
 import '../widgets/background.dart';
 import '../widgets/snackbar.dart';
+import '../widgets/transparent_textbutton.dart';
+import '../widgets/transparent_outlinedbutton.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -23,11 +25,18 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   void login(BuildContext context) async {
     try {
       String email = emailController.text.trim();
       String password = passwordController.text.trim();
-      
+
       UserCredential userCredential = await fbService.login(email, password);
       User? user = userCredential.user;
       DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user?.uid).get();
@@ -38,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     } on FirebaseAuthException catch (e) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(text: e.code));
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(text: e.code, color: Colors.red, textColor: Colors.white,));
     }
   }
 
@@ -46,111 +55,55 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     // Scaffold that contains the login page
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: Header(),
       body: Background(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-          child: Column(
-            // Aligns the widgets in the column to the start on the cross axis (horizontal axis)
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Header(),
-              SizedBox(height: 150),
-              // Centered text that says "Login"
-              Center(child: Text("Login", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
-              SizedBox(height: 20),
-              Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextLabel(text: "Email"),
-                    // Text field for the user to enter their email
-                    CustomTextFormField(controller: emailController, inputType: TextInputType.emailAddress, hintText: 'Email'),
-                    SizedBox(height: 20),
-                    CustomTextLabel(text: "Password"),
-                    CustomTextFormField(controller: passwordController, obscureText: true, hintText: 'Password'),
-                    SizedBox(height: 20),
-                    // Centered button that says "Login"
-                    Center(
-                      child: OutlinedButton(
-                        onPressed: () async {
-                          if (formKey.currentState!.validate()) {
-                            formKey.currentState!.save();
-                            login(context);
-                          }
-                        },
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: Size(300, 30),
-                          backgroundColor: Colors.transparent,
-                          side: BorderSide(color: Colors.black),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                        ),
-                        child: Text("Login", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                      ),
+        padding: 20.0,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Centered text that says "Login"
+            Text("Login", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            SizedBox(height: 20),
+            Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomTextLabel(text: "Email"),
+                  // Text field for the user to enter their email
+                  CustomTextFormField(controller: emailController, inputType: TextInputType.emailAddress, hintText: 'Email'),
+                  SizedBox(height: 20),
+                  // Text field for the user to enter their password
+                  CustomTextLabel(text: "Password"),
+                  CustomTextFormField(controller: passwordController, obscureText: true, hintText: 'Password'),
+                  SizedBox(height: 20),
+                  // Centered button that says "Login"
+                  Center(
+                    child: TransparentOutlinedbutton(
+                      onPressed: () async {
+                        if (formKey.currentState!.validate()) {
+                          formKey.currentState!.save();
+                          login(context);
+                        }
+                      },
+                      text: "Login"
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-
-              SizedBox(height: 10),
-              // Centered text that says "Forgotten your Password?"
-              Align(
-                alignment: Alignment.center,
-                child: CustomTextButton(
-                  text: "Forgotten your Password?",
-                  bold: true,
-                  onPressed: () => Navigator.pushReplacementNamed(context, '/forget_password1'),
-                ),
-              ),
-              // Centered text that says "New to Refresh Deals? Create an account!" and navigates to the register page when pressed
-              Align(
-                alignment: Alignment.center,
-                child: CustomTextButton(
-                  text: "New to Refresh Deals? Create an account!",
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/register');
-                  },
-                ),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: 10),
+            // Button for forget password
+            CustomTextButton(
+              text: "Forgotten your Password?",
+              bold: true,
+              onPressed: () => Navigator.pushReplacementNamed(context, '/forget_password1'),
+            ),
+            // Button for registration
+            CustomTextButton(text: "New to Refresh Deals? Create an account!", onPressed: () => Navigator.pushReplacementNamed(context, '/register')),
+          ],
         ),
-      ),
-    );
-  }
-}
-
-/// A custom text button that can be used to create text buttons that are
-/// visually appealing and easy to use.
-///
-/// The [text] parameter is the text that will be displayed on the button.
-///
-/// The [onPressed] parameter is an optional callback that will be called when
-/// the button is pressed.
-///
-/// The [bold] parameter is an optional boolean that determines whether the
-/// text on the button should be bold or not. The default value is false.
-class CustomTextButton extends StatelessWidget {
-  final String text;
-  final VoidCallback? onPressed;
-  final bool bold;
-
-  const CustomTextButton({super.key, required this.text, this.onPressed, this.bold = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPressed ?? () {},
-      style: TextButton.styleFrom(
-        // Make the button transparent so that it doesn't take up any space.
-        backgroundColor: Colors.transparent,
-        // Make the button as small as possible.
-        visualDensity: VisualDensity(horizontal: VisualDensity.minimumDensity, vertical: VisualDensity.minimumDensity),
-      ),
-      child: Text(
-        text,
-        // If the [bold] parameter is true, make the text bold.
-        style: TextStyle(color: Colors.black, fontWeight: bold ? FontWeight.bold : FontWeight.normal),
       ),
     );
   }

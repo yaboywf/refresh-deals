@@ -3,6 +3,9 @@ import '../pages/register2.dart';
 import '../widgets/text_label.dart';
 import '../widgets/header.dart';
 import '../widgets/background.dart';
+import '../widgets/text_form_field.dart';
+import '../widgets/transparent_textbutton.dart';
+import '../widgets/transparent_outlinedbutton.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -13,179 +16,72 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   final formKey = GlobalKey<FormState>();
-  String? password;
-  String? username;
-  String? email;
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    emailController.dispose();
+    super.dispose();
+  }
+
+  void submit() {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SignupPage2(email: emailController.text, password: passwordController.text, username: usernameController.text),
+        ),
+      );
+    }
+  }
 
   // This page is used to register a new user.
   // It takes in a new username, new password, and an email address.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: Header(),
       body: Background(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Header(),
-              SizedBox(height: 100),
-              Center(child: Text("Signup", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
-              SizedBox(height: 20),
-              Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextLabel(text: "New Username"),
-                    TextFormField(
-                      cursorColor: Colors.black,
-                      onSaved: (value) => username = value,
-                      // If the username is invalid, show an error message
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a username';
-                        }
-                        return null; // valid
-                      },
-                      decoration: InputDecoration(
-                        errorStyle: TextStyle(color: Colors.red),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        fillColor: Colors.transparent,
-                        filled: true,
-                        hintText: 'Enter Username',
-                        hintStyle: TextStyle(fontSize: 14.0, color: Colors.black),
-                      ),
+        padding: 20.0,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Signup", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            SizedBox(height: 20),
+            Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Text field for the user to enter their username
+                  CustomTextLabel(text: "New Username"),
+                  CustomTextFormField(controller: usernameController, hintText: "Username"),
+                  SizedBox(height: 20),
+                  // Text field for the user to enter their password
+                  CustomTextLabel(text: "New Password"),
+                  CustomTextFormField(controller: passwordController, obscureText: true, hintText: "Password"),
+                  SizedBox(height: 20),
+                  // Text field for the user to enter their email
+                  CustomTextLabel(text: "Email"),
+                  CustomTextFormField(controller: emailController, inputType: TextInputType.emailAddress, hintText: "Email"),
+                  SizedBox(height: 20),
+                  Center(
+                    child: TransparentOutlinedbutton(
+                      onPressed: submit,
+                      text: "Next",
                     ),
-                    SizedBox(height: 20),
-                    CustomTextLabel(text: "New Password"),
-                    TextFormField(
-                      cursorColor: Colors.black,
-                      onSaved: (value) => password = value,
-                      // If the password is invalid, show an error message
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a password';
-                        }
-                        return null; // valid
-                      },
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        errorStyle: TextStyle(color: Colors.red),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        fillColor: Colors.transparent,
-                        filled: true,
-                        hintText: 'Enter Password',
-                        hintStyle: TextStyle(fontSize: 14.0, color: Colors.black),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    CustomTextLabel(text: "Email"),
-                    TextFormField(
-                      cursorColor: Colors.black,
-                      onSaved: (value) => email = value,
-                      // If the email is invalid, show an error message
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a email';
-                        } else {
-                          String pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
-                          RegExp regex = RegExp(pattern);
-
-                          if (!regex.hasMatch(value)) return 'Please enter a valid email';
-                        }
-                        return null; // valid
-                      },
-                      decoration: InputDecoration(
-                        errorStyle: TextStyle(color: Colors.red),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        fillColor: Colors.transparent,
-                        filled: true,
-                        hintText: 'Enter Email',
-                        hintStyle: TextStyle(fontSize: 14.0, color: Colors.black),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Center(
-                      child: OutlinedButton(
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {
-                            formKey.currentState!.save();
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => SignupPage2(email: email!, password: password!, username: username!)),
-                            );
-                          }
-                        },
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: Colors.black),
-                          backgroundColor: Colors.transparent,
-                          minimumSize: Size(300, 30),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: BorderSide(color: Colors.black)),
-                        ),
-                        child: Text("Next", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Center(
-                child: TextButton(
-                  onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    visualDensity: VisualDensity(horizontal: VisualDensity.minimumDensity, vertical: VisualDensity.minimumDensity),
                   ),
-                  child: Text("I already have an account", style: TextStyle(color: Colors.black)),
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+            CustomTextButton(text: "I already have an account", onPressed: () => Navigator.pushReplacementNamed(context, '/login')),
+          ],
         ),
       ),
     );
