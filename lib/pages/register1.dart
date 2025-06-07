@@ -17,8 +17,8 @@ class _SignupPageState extends State<SignupPage> {
   String? username;
   String? email;
 
-  /// This page is used to register a new user.
-  /// It takes in a new username, new password, and an email address.
+  // This page is used to register a new user.
+  // It takes in a new username, new password, and an email address.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,19 +30,14 @@ class _SignupPageState extends State<SignupPage> {
             children: [
               Header(),
               SizedBox(height: 100),
-              Center(
-                child: Text(
-                  "Signup",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-              ),
+              Center(child: Text("Signup", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
               SizedBox(height: 20),
               Form(
                 key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextLabel(text: "New Username"),
+                    CustomTextLabel(text: "New Username"),
                     TextFormField(
                       cursorColor: Colors.black,
                       onSaved: (value) => username = value,
@@ -74,14 +69,11 @@ class _SignupPageState extends State<SignupPage> {
                         fillColor: Colors.transparent,
                         filled: true,
                         hintText: 'Enter Username',
-                        hintStyle: TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.black,
-                        ),
+                        hintStyle: TextStyle(fontSize: 14.0, color: Colors.black),
                       ),
                     ),
                     SizedBox(height: 20),
-                    TextLabel(text: "New Password"),
+                    CustomTextLabel(text: "New Password"),
                     TextFormField(
                       cursorColor: Colors.black,
                       onSaved: (value) => password = value,
@@ -114,14 +106,11 @@ class _SignupPageState extends State<SignupPage> {
                         fillColor: Colors.transparent,
                         filled: true,
                         hintText: 'Enter Password',
-                        hintStyle: TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.black,
-                        ),
+                        hintStyle: TextStyle(fontSize: 14.0, color: Colors.black),
                       ),
                     ),
                     SizedBox(height: 20),
-                    TextLabel(text: "Email"),
+                    CustomTextLabel(text: "Email"),
                     TextFormField(
                       cursorColor: Colors.black,
                       onSaved: (value) => email = value,
@@ -130,8 +119,7 @@ class _SignupPageState extends State<SignupPage> {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a email';
                         } else {
-                          String pattern =
-                              r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+                          String pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
                           RegExp regex = RegExp(pattern);
 
                           if (!regex.hasMatch(value)) return 'Please enter a valid email';
@@ -159,10 +147,7 @@ class _SignupPageState extends State<SignupPage> {
                         fillColor: Colors.transparent,
                         filled: true,
                         hintText: 'Enter Email',
-                        hintStyle: TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.black,
-                        ),
+                        hintStyle: TextStyle(fontSize: 14.0, color: Colors.black),
                       ),
                     ),
                     SizedBox(height: 20),
@@ -173,14 +158,7 @@ class _SignupPageState extends State<SignupPage> {
                             formKey.currentState!.save();
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) => SignupPage2(
-                                      email: email!,
-                                      password: password!,
-                                      username: username!,
-                                    ),
-                              ),
+                              MaterialPageRoute(builder: (context) => SignupPage2(email: email!, password: password!, username: username!)),
                             );
                           }
                         },
@@ -188,18 +166,9 @@ class _SignupPageState extends State<SignupPage> {
                           side: BorderSide(color: Colors.black),
                           backgroundColor: Colors.transparent,
                           minimumSize: Size(300, 30),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            side: BorderSide(color: Colors.black),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: BorderSide(color: Colors.black)),
                         ),
-                        child: Text(
-                          "Next",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: Text("Next", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                       ),
                     ),
                   ],
@@ -207,19 +176,12 @@ class _SignupPageState extends State<SignupPage> {
               ),
               Center(
                 child: TextButton(
-                  onPressed:
-                      () => Navigator.pushReplacementNamed(context, '/login'),
+                  onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.transparent,
-                    visualDensity: VisualDensity(
-                      horizontal: VisualDensity.minimumDensity,
-                      vertical: VisualDensity.minimumDensity,
-                    ),
+                    visualDensity: VisualDensity(horizontal: VisualDensity.minimumDensity, vertical: VisualDensity.minimumDensity),
                   ),
-                  child: Text(
-                    "I already have an account",
-                    style: TextStyle(color: Colors.black),
-                  ),
+                  child: Text("I already have an account", style: TextStyle(color: Colors.black)),
                 ),
               ),
             ],

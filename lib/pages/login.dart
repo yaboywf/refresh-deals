@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import '../services/firebase_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../widgets/text_label.dart';
+import '../widgets/text_form_field.dart';
 import '../widgets/header.dart';
 import '../widgets/background.dart';
+import '../widgets/snackbar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,8 +19,28 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
-  String? username;
-  String? password;
+  FirebaseService fbService = GetIt.instance<FirebaseService>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  void login(BuildContext context) async {
+    try {
+      String email = emailController.text.trim();
+      String password = passwordController.text.trim();
+      
+      UserCredential userCredential = await fbService.login(email, password);
+      User? user = userCredential.user;
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user?.uid).get();
+      if (userDoc.exists) {
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(text: 'Hello, ${userDoc['username']} ($email)!'));
+        Navigator.pushReplacementNamed(context, "/${userDoc['accountType']}_home");
+      }
+    } on FirebaseAuthException catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(text: e.code));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,132 +56,36 @@ class _LoginPageState extends State<LoginPage> {
               Header(),
               SizedBox(height: 150),
               // Centered text that says "Login"
-              Center(
-                child: Text(
-                  "Login",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-              ),
+              Center(child: Text("Login", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
               SizedBox(height: 20),
               Form(
                 key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextLabel(text: "Username"),
-                    // Text field for the user to enter their username
-                    TextFormField(
-                      cursorColor: Colors.black,
-                      onSaved: (value) => username = value,
-                      // If the username is invalid, show an error message
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your username';
-                        }
-                        return null; // valid
-                      },
-                      decoration: InputDecoration(
-                        errorStyle: TextStyle(color: Colors.red),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        fillColor: Colors.transparent,
-                        filled: true,
-                        hintText: 'Enter Username',
-                        hintStyle: TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    CustomTextLabel(text: "Email"),
+                    // Text field for the user to enter their email
+                    CustomTextFormField(controller: emailController, inputType: TextInputType.emailAddress, hintText: 'Email'),
                     SizedBox(height: 20),
-                    TextLabel(text: "Password"),
-                    TextFormField(
-                      cursorColor: Colors.black,
-                      onSaved: (value) => password = value,
-                      // If the username is invalid, show an error message
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        }
-                        return null; // valid
-                      },
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        errorStyle: TextStyle(color: Colors.red),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        fillColor: Colors.transparent,
-                        filled: true,
-                        hintText: 'Enter Password',
-                        hintStyle: TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    CustomTextLabel(text: "Password"),
+                    CustomTextFormField(controller: passwordController, obscureText: true, hintText: 'Password'),
                     SizedBox(height: 20),
                     // Centered button that says "Login"
                     Center(
                       child: OutlinedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (formKey.currentState!.validate()) {
                             formKey.currentState!.save();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Hello, $username!', style: TextStyle(color: Colors.black)),
-                                duration: Duration(seconds: 2),
-                                backgroundColor: Color.fromRGBO(233, 218, 200, 1.0)
-                              ),
-                            );
-                            Navigator.pushReplacementNamed(
-                              context,
-                              username == "shop" ? '/shop_home' : '/buyer_home',
-                            );
+                            login(context);
                           }
                         },
                         style: OutlinedButton.styleFrom(
                           minimumSize: Size(300, 30),
                           backgroundColor: Colors.transparent,
                           side: BorderSide(color: Colors.black),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                         ),
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: Text("Login", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                       ),
                     ),
                   ],
@@ -168,11 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: CustomTextButton(
                   text: "Forgotten your Password?",
                   bold: true,
-                  onPressed:
-                      () => Navigator.pushReplacementNamed(
-                        context,
-                        '/forget_password1',
-                      ),
+                  onPressed: () => Navigator.pushReplacementNamed(context, '/forget_password1'),
                 ),
               ),
               // Centered text that says "New to Refresh Deals? Create an account!" and navigates to the register page when pressed
@@ -208,12 +135,7 @@ class CustomTextButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool bold;
 
-  const CustomTextButton({
-    super.key,
-    required this.text,
-    this.onPressed,
-    this.bold = false,
-  });
+  const CustomTextButton({super.key, required this.text, this.onPressed, this.bold = false});
 
   @override
   Widget build(BuildContext context) {
@@ -223,18 +145,12 @@ class CustomTextButton extends StatelessWidget {
         // Make the button transparent so that it doesn't take up any space.
         backgroundColor: Colors.transparent,
         // Make the button as small as possible.
-        visualDensity: VisualDensity(
-          horizontal: VisualDensity.minimumDensity,
-          vertical: VisualDensity.minimumDensity,
-        ),
+        visualDensity: VisualDensity(horizontal: VisualDensity.minimumDensity, vertical: VisualDensity.minimumDensity),
       ),
       child: Text(
         text,
         // If the [bold] parameter is true, make the text bold.
-        style: TextStyle(
-          color: Colors.black,
-          fontWeight: bold ? FontWeight.bold : FontWeight.normal,
-        ),
+        style: TextStyle(color: Colors.black, fontWeight: bold ? FontWeight.bold : FontWeight.normal),
       ),
     );
   }
