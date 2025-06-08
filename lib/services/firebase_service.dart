@@ -15,4 +15,9 @@ class FirebaseService {
   Future<void> forgetPassword(email) {
     return FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
+
+  // logout
+  Future<void> logout() {
+    return FirebaseAuth.instance.signOut();
+  }
 }

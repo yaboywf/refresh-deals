@@ -1,27 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../services/firebase_service.dart';
 import '../widgets/navigation_bar.dart';
 import '../widgets/text_field.dart';
 import '../widgets/text_label.dart';
 import '../widgets/header.dart';
 import '../widgets/background.dart';
+import '../widgets/snackbar.dart';
 
 // ignore: must_be_immutable
 class ProfilePage extends StatelessWidget {
-  /// The type of account to show.
+  // The type of account to show.
   String accountType;
   ProfilePage({super.key, this.accountType = 'buyer'});
+  FirebaseService fbService = GetIt.instance<FirebaseService>();
 
-  /// Fetches some data (with a delay) and returns a string.
-  ///
-  /// This is just a placeholder for some actual data fetching.
+  // The text controllers for the fields.
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController storeNameController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
+  // Fetches some data (with a delay) and returns a string.
   Future<String> fetchData() async {
     await Future.delayed(const Duration(seconds: 2));
     return "Data has been fetched!";
   }
 
-  /// Fetches some data (with a delay) and returns a string, but throws an exception.
-  ///
-  /// This is just a placeholder for some actual data fetching.
+  // Fetches some data (with a delay) and returns a string, but throws an exception.
   Future<String> fetchDataWithError() async {
     await Future.delayed(const Duration(seconds: 2));
     throw Exception(
@@ -29,198 +39,110 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  /// The text controllers for the fields.
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController storeNameController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  // Shows a dialog when user attempts to logout
+  void showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Color.fromRGBO(233, 218, 200, 1.0),
+          title: Text("Logout"),
+          content: Text("Are you sure you want to logout?"),
+          actions: [
+            TextButton(child: Text("Cancel", style: TextStyle(color: Colors.black)), onPressed: () => Navigator.of(context).pop()),
+            TextButton(
+              child: Text("Logout", style: TextStyle(color: Colors.black)),
+              onPressed: () async {
+                try {
+                  await fbService.logout();
+                  if (!context.mounted) return;
+                  CustomSnackBar(text: "Logout successfully");
+                  Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
+                } on FirebaseAuthException catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(text: e.code, color: Colors.red, textColor: Colors.white));
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    /// Get the arguments passed from the previous screen.
-    final arguments =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String>?;
+    // Get the arguments passed from the previous screen.
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map<String, String>?;
 
-    /// If the account type is not specified, use the one passed in the arguments.
-    if (arguments != null && arguments.containsKey('accountType')) {
-      accountType = arguments['accountType']!;
-    }
+    // If the account type is not specified, use the one passed in the arguments.
+    if (arguments != null && arguments.containsKey('accountType')) accountType = arguments['accountType']!;
 
     return Scaffold(
-      /// The navigation bar at the bottom.
       bottomNavigationBar: NavBar(accountType: accountType, currentIndex: 2),
       body: Background(
-        /// The background image.
-        imagePath: 'images/authentication_bg.jpg',
         padding: 20.0,
+        // The future to fetch the data.
         child: FutureBuilder<String>(
-          /// The future to fetch the data.
           future: fetchData(),
           builder: (context, snapshot) {
-            /// If the future is still waiting, show a loading indicator.
+            // If the future is still waiting, show a loading indicator.
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Column(
                 children: [
-                  Header(),
-                  SizedBox(height: 100),
+                  Header(hasPadding: false,),
+                  SizedBox(height: 80),
                   CircularProgressIndicator(color: Colors.black),
                   SizedBox(height: 15),
-                  Text(
-                    "Loading...",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  Text("Loading...", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
                 ],
               );
             } else if (snapshot.hasError) {
-              /// If the future has an error, show an error message.
+              // If the future has an error, show an error message.
               return Column(
                 children: [
-                  Header(),
-                  SizedBox(height: 70),
-                  Container(
-                    padding: const EdgeInsets.all(20.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade200,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withAlpha(100),
-                          spreadRadius: 3,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        Icon(Icons.error, color: Colors.red, size: 50),
-                        SizedBox(height: 15),
-                        Text(
-                          "An Error Occurred!",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 15),
-                        Text(
-                          snapshot.error.toString(),
-                          maxLines: 10,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Colors.black, fontSize: 18),
-                        ),
-                      ],
-                    ),
-                  ),
+                  Header(hasPadding: false,),
+                  SizedBox(height: 80),
+                  Icon(Icons.error, color: Colors.red, size: 50),
+                  SizedBox(height: 15),
+                  Text("An Error Occurred!", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 15),
+                  Text(snapshot.error.toString(), maxLines: 10, overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.black, fontSize: 18)),
                 ],
               );
             } else {
-              /// If the future has data, show the form.
+              // If the future has data, show the form.
               return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Header(),
-                    Text(
-                      "General",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
+                    Header(hasPadding: false,),
+                    Text("General", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
                     SizedBox(height: 20),
                     CustomTextLabel(text: "Username"),
-                    CustomTextField(
-                      controller: nameController,
-                      hintText: "Enter Username",
-                      obscureText: false,
-                    ),
+                    CustomTextField(controller: nameController, hintText: "Enter Username", obscureText: false),
                     SizedBox(height: 20),
                     CustomTextLabel(text: "Email"),
-                    CustomTextField(
-                      controller: emailController,
-                      hintText: "Enter Email",
-                      obscureText: false,
-                    ),
+                    CustomTextField(controller: emailController, hintText: "Enter Email", obscureText: false),
                     if (accountType == 'shop') ...[
                       SizedBox(height: 20),
                       CustomTextLabel(text: "Business Name"),
-                      CustomTextField(
-                        controller: storeNameController,
-                        hintText: "Enter Business Name",
-                        obscureText: false,
-                      ),
+                      CustomTextField(controller: storeNameController, hintText: "Enter Business Name", obscureText: false),
                       SizedBox(height: 20),
                       CustomTextLabel(text: "Location"),
-                      CustomTextField(
-                        controller: addressController,
-                        hintText: "Enter Store Location",
-                        obscureText: false,
-                      ),
+                      CustomTextField(controller: addressController, hintText: "Enter Store Location", obscureText: false),
                     ],
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: BorderButton(text: "Save"),
-                    ),
+                    Align(alignment: Alignment.centerRight, child: BorderButton(text: "Save")),
                     SizedBox(height: 30),
-                    Text(
-                      "Change Password",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
+                    Text("Change Password", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
                     SizedBox(height: 20),
                     CustomTextLabel(text: "New Password"),
-                    CustomTextField(
-                      controller: passwordController,
-                      hintText: "Enter Password",
-                      obscureText: false,
-                    ),
+                    CustomTextField(controller: passwordController, hintText: "Enter Password", obscureText: false),
                     SizedBox(height: 20),
                     CustomTextLabel(text: "Re-enter Password"),
-                    CustomTextField(
-                      controller: confirmPasswordController,
-                      hintText: "Enter Password",
-                      obscureText: false,
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: BorderButton(text: "Change"),
-                    ),
-                    Center(
-                      child: BorderButton(
-                        text: "Logout",
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Logged out successfully!',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              duration: Duration(seconds: 2),
-                              backgroundColor: Color.fromRGBO(
-                                233,
-                                218,
-                                200,
-                                1.0,
-                              ),
-                            ),
-                          );
-                          Navigator.pushReplacementNamed(context, "/login");
-                        },
-                      ),
-                    ),
+                    CustomTextField(controller: confirmPasswordController, hintText: "Enter Password", obscureText: false),
+                    Align(alignment: Alignment.centerRight, child: BorderButton(text: "Change")),
+                    Center(child: BorderButton(text: "Logout", onPressed: () => showLogoutDialog(context))),
                   ],
                 ),
               );
@@ -246,29 +168,14 @@ class BorderButton extends StatelessWidget {
     return OutlinedButton(
       /// The callback that will be called when the button is pressed.
       onPressed: onPressed ?? () {},
-
-      /// The style for the button.
       style: OutlinedButton.styleFrom(
         /// The minimum size for the button.
         minimumSize: Size(80, 0),
-
-        /// The shape of the button.
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-
-        /// The border of the button.
         side: BorderSide(color: Colors.black),
-
-        /// The padding for the button.
         padding: EdgeInsets.all(3.0),
       ),
-
-      /// The text that will be displayed on the button.
-      child: Text(
-        text,
-
-        /// The style for the text.
-        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-      ),
+      child: Text(text, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
     );
   }
 }

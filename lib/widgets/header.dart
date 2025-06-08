@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class Header extends StatelessWidget implements PreferredSizeWidget {
-  const Header({super.key});
+  bool hasPadding;
+  Header({super.key, this.hasPadding = true});
 
   /// Build a header with the project logo.
   @override
@@ -11,7 +13,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       title: null,
       flexibleSpace: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 3.0),
+        padding: hasPadding ? EdgeInsets.symmetric(horizontal: 20.0, vertical: 3.0) : EdgeInsets.zero,
         child: Align(alignment: Alignment.topLeft, child: Image.asset('images/logo.png', width: 280, height: 100, fit: BoxFit.contain)),
       ),
     );
