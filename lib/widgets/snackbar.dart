@@ -6,6 +6,6 @@ class CustomSnackBar extends SnackBar {
     : super(
         content: Text(text, style: TextStyle(color: textColor ?? Colors.black)),
         duration: Duration(seconds: 2),
-        backgroundColor: color ?? Color.fromRGBO(233, 218, 200, 1.0),
+        backgroundColor: color ?? Colors.green,
       );
 }

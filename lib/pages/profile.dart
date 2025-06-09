@@ -36,6 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String provider = '';
 
   final changePasswordFormKey = GlobalKey<FormState>();
+  final generalFormKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -127,38 +128,57 @@ class _ProfilePageState extends State<ProfilePage> {
               Header(hasPadding: false),
               Text("General", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
               SizedBox(height: 20),
-              CustomTextLabel(text: "Username"),
-              CustomTextFormField(controller: nameController, hintText: "Enter Username"),
-              SizedBox(height: 20),
-              CustomTextLabel(text: "Email"),
-              CustomTextFormField(
-                controller: emailController,
-                hintText: "Email",
-                enabled: !(provider == 'google.com' || provider == 'github.com'),
-                inputType: TextInputType.emailAddress,
-              ),
-              if (provider == 'google.com' || provider == 'github.com') ...[
-                SizedBox(height: 5),
-                Row(
+              Form(
+                key: generalFormKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    FaIcon(FontAwesomeIcons.circleExclamation, color: Colors.red, size: 12.0),
-                    SizedBox(width: 5),
-                    Text(
-                      "Email can't be changed (${provider.split('.')[0][0].toUpperCase() + provider.split('.')[0].substring(1)} Login)",
-                      style: TextStyle(color: Colors.red, fontSize: 13),
+                    CustomTextLabel(text: "Username"),
+                    CustomTextFormField(controller: nameController, hintText: "Enter Username"),
+                    SizedBox(height: 20),
+                    CustomTextLabel(text: "Email"),
+                    CustomTextFormField(
+                      controller: emailController,
+                      hintText: "Email",
+                      enabled: !(provider == 'google.com' || provider == 'github.com'),
+                      inputType: TextInputType.emailAddress,
+                    ),
+                    if (provider == 'google.com' || provider == 'github.com') ...[
+                      SizedBox(height: 5),
+                      Row(
+                        children: [
+                          FaIcon(FontAwesomeIcons.circleExclamation, color: Colors.red, size: 12.0),
+                          SizedBox(width: 5),
+                          Text(
+                            "Email can't be changed (${provider.split('.')[0][0].toUpperCase() + provider.split('.')[0].substring(1)} Login)",
+                            style: TextStyle(color: Colors.red, fontSize: 13),
+                          ),
+                        ],
+                      ),
+                    ],
+                    if (widget.accountType == 'shop') ...[
+                      SizedBox(height: 20),
+                      CustomTextLabel(text: "Business Name"),
+                      CustomTextField(controller: storeNameController, hintText: "Enter Business Name", obscureText: false),
+                      SizedBox(height: 20),
+                      CustomTextLabel(text: "Location"),
+                      CustomTextField(controller: addressController, hintText: "Enter Store Location", obscureText: false),
+                    ],
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TransparentOutlinedbutton(
+                        text: "Save",
+                        onPressed: () {
+                          if (generalFormKey.currentState!.validate()) {
+                            fbService.updateUsername(context, nameController.text);
+                          }
+                        },
+                        minimumSize: Size(90, 25),
+                      ),
                     ),
                   ],
                 ),
-              ],
-              if (widget.accountType == 'shop') ...[
-                SizedBox(height: 20),
-                CustomTextLabel(text: "Business Name"),
-                CustomTextField(controller: storeNameController, hintText: "Enter Business Name", obscureText: false),
-                SizedBox(height: 20),
-                CustomTextLabel(text: "Location"),
-                CustomTextField(controller: addressController, hintText: "Enter Store Location", obscureText: false),
-              ],
-              Align(alignment: Alignment.centerRight, child: TransparentOutlinedbutton(text: "Save", onPressed: () {}, minimumSize: Size(90, 25))),
+              ),
               SizedBox(height: 30),
 
               Text("Change Password", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),

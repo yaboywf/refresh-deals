@@ -142,11 +142,30 @@ class FirebaseService {
         }
 
         if (!context.mounted) return;
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(CustomSnackBar(text: message, color: Colors.red, textColor: Colors.white));
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(text: message, color: Colors.red, textColor: Colors.white));
       }
       debugPrint("Error updating password: $e");
+    }
+  }
+
+  // update username
+
+  Future<void> updateUsername(BuildContext context, String newUsername) async {
+    try {
+      User? user = getCurrentUser();
+
+      if (user != null) {
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).update({'username': newUsername});
+        await user.updateDisplayName(newUsername);
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(text: 'Username updated successfully!', textColor: Colors.white));
+      }
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(text: e.code, color: Colors.red, textColor: Colors.white));
+        debugPrint("Error updating username: $e");
+      }
     }
   }
 }
