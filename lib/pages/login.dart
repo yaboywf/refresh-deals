@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../services/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,7 +22,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
-  FirebaseService fbService = GetIt.instance<FirebaseService>();
+  final FirebaseService fbService = GetIt.instance<FirebaseService>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -47,7 +48,9 @@ class _LoginPageState extends State<LoginPage> {
       }
     } on FirebaseAuthException catch (e) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(text: e.code, color: Colors.red, textColor: Colors.white,));
+      ScaffoldMessenger.of(context).showSnackBar(
+        CustomSnackBar(text: e.code == 'invalid-credentials' ? "Incorrect username or password" : e.code, color: Colors.red, textColor: Colors.white),
+      );
     }
   }
 
@@ -87,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                           login(context);
                         }
                       },
-                      text: "Login"
+                      text: "Login",
                     ),
                   ),
                 ],
@@ -101,9 +104,50 @@ class _LoginPageState extends State<LoginPage> {
             ),
             // Button for registration
             CustomTextButton(text: "New to Refresh Deals? Create an account!", onPressed: () => Navigator.pushReplacementNamed(context, '/register')),
+
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AuthOthersOutlinedButton(onPressed: () => fbService.signInWithGoogle(context), organisation: "Google"),
+                SizedBox(width: 5),
+                AuthOthersOutlinedButton(onPressed: () => fbService.signInWithGithub(context), organisation: "Github"),
+              ],
+            ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class AuthOthersOutlinedButton extends StatelessWidget {
+  final String organisation;
+  final VoidCallback onPressed;
+
+  const AuthOthersOutlinedButton({super.key, required this.onPressed, required this.organisation});
+
+  IconData getIcon(String org) {
+    switch (org.toLowerCase()) {
+      case 'google':
+        return FontAwesomeIcons.google;
+      case 'github':
+        return FontAwesomeIcons.github;
+      default:
+        return FontAwesomeIcons.user; // fallback icon
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        backgroundColor: Colors.transparent,
+        side: BorderSide(color: Colors.black),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+      onPressed: onPressed,
+      child: FaIcon(getIcon(organisation), color: Colors.black),
     );
   }
 }
