@@ -13,17 +13,14 @@ import '../pages/register3.dart';
 // ignore: must_be_immutable
 class SignupPage2 extends StatelessWidget {
   FirebaseService fbService = GetIt.instance<FirebaseService>();
-  final String email;
-  final String password;
   final String username;
+  final String uid;
 
-  SignupPage2({super.key, this.email = '', this.password = '', this.username = ''});
+  SignupPage2({super.key, this.username = '', this.uid = ''});
 
   void registerBuyer(BuildContext context) async {
     try {
-      UserCredential userCredential = await fbService.register(email, password);
-      User? user = userCredential.user;
-      if (user != null) await FirebaseFirestore.instance.collection('users').doc(user.uid).set({'username': username, 'accountType': 'buyer'});
+      if (uid != '') await FirebaseFirestore.instance.collection('users').doc(uid).set({'username': username, 'accountType': 'buyer'});
 
       if (!context.mounted) return;
       Navigator.pushNamedAndRemoveUntil(context, "/register4", (Route<dynamic> route) => false);
@@ -36,6 +33,13 @@ class SignupPage2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (uid == '' || username == '') {
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(text: "uid or username is empty", color: Colors.red, textColor: Colors.white));
+        Navigator.pushNamedAndRemoveUntil(context, "/register", (Route<dynamic> route) => false);
+      }
+    });
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: Header(),
@@ -56,11 +60,7 @@ class SignupPage2 extends StatelessWidget {
               width: double.infinity,
               child: TransparentOutlinedbutton(
                 text: "Yes",
-                onPressed:
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignupPage3(email: email, password: password, username: username)),
-                    ),
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage3(username: username, uid: uid))),
               ),
             ),
             SizedBox(width: double.infinity, child: TransparentOutlinedbutton(text: "No", onPressed: () => registerBuyer(context))),

@@ -13,10 +13,9 @@ import '../widgets/transparent_outlinedbutton.dart';
 
 // ignore: must_be_immutable
 class SignupPage3 extends StatelessWidget {
-  final String email;
-  final String password;
   final String username;
-  SignupPage3({super.key, this.email = '', this.password = '', this.username = ''});
+  final String uid;
+  SignupPage3({super.key, this.username = '', this.uid = ''});
 
   final formKey = GlobalKey<FormState>();
   FirebaseService fbService = GetIt.instance<FirebaseService>();
@@ -27,10 +26,8 @@ class SignupPage3 extends StatelessWidget {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       try {
-        UserCredential userCredential = await fbService.register(email, password);
-        User? user = userCredential.user;
-        if (user != null) {
-          await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        if (uid != '') {
+          await FirebaseFirestore.instance.collection('users').doc(uid).set({
             'username': username,
             'accountType': 'shop',
             'location': locationController.text,
