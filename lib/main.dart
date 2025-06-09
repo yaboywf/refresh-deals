@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
       stream: fbService.getAuthUser(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const CircularProgressIndicator(color: Colors.black);
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         }
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
           future: fbService.getUserInformation(),
           builder: (context, snapshot1) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
+              return const CircularProgressIndicator(color: Colors.black);
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             }
@@ -73,7 +73,7 @@ class MyApp extends StatelessWidget {
 
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: 'Refresh Deals',
+              title: 'ReFresh Deals',
               theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
               home: page,
               routes: {

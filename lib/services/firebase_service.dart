@@ -99,7 +99,7 @@ class FirebaseService {
     }
   }
 
-  // get auth user 
+  // get auth user
   Stream<User?> getAuthUser() {
     return FirebaseAuth.instance.authStateChanges();
   }
@@ -109,8 +109,44 @@ class FirebaseService {
     return FirebaseAuth.instance.currentUser;
   }
 
+  // get user information
   Future<dynamic> getUserInformation() {
     if (getCurrentUser() == null) return Future.value(null);
     return FirebaseFirestore.instance.collection('users').doc(getCurrentUser()!.uid).get();
+  }
+
+  // update password
+  Future<void> updatePassword(BuildContext context, String password) async {
+    try {
+      User? user = getCurrentUser();
+
+      if (user != null) {
+        await user.updatePassword(password);
+      }
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        String message = '';
+        switch (e.code) {
+          case 'invalid-password':
+            {
+              message = 'This is an invalid password. Please try again.';
+              break;
+            }
+          case 'weak-password':
+            {
+              message = 'This is a weak password. Please try again.';
+              break;
+            }
+          default:
+            message = e.code;
+        }
+
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(CustomSnackBar(text: message, color: Colors.red, textColor: Colors.white));
+      }
+      debugPrint("Error updating password: $e");
+    }
   }
 }

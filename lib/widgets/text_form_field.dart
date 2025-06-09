@@ -5,15 +5,17 @@ class CustomTextFormField extends StatelessWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final String hintText;
-  bool obscureText;
+  final bool obscureText;
+  final bool enabled;
   final TextInputType inputType;
 
-  CustomTextFormField({
+  const CustomTextFormField({
     super.key,
     this.validator,
     required this.controller,
     required this.hintText,
     this.obscureText = false,
+    this.enabled = true,
     this.inputType = TextInputType.text,
   });
 
@@ -22,6 +24,7 @@ class CustomTextFormField extends StatelessWidget {
     return TextFormField(
       cursorColor: Colors.black,
       controller: controller,
+      enabled: enabled,
       validator: validator ?? (value) {
         if (inputType == TextInputType.emailAddress) {
           if (value == null || value.isEmpty) return 'Please enter your email';
@@ -45,6 +48,10 @@ class CustomTextFormField extends StatelessWidget {
           borderSide: BorderSide(color: Colors.black),
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
+        disabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.black),
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.black),
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -60,7 +67,7 @@ class CustomTextFormField extends StatelessWidget {
         fillColor: Colors.transparent,
         filled: true,
         hintText: "Enter $hintText",
-        hintStyle: TextStyle(fontSize: 14.0, color: Colors.black),
+        hintStyle: TextStyle(fontSize: 14.0, color: enabled ? Colors.black : Colors.grey),
       ),
     );
   }

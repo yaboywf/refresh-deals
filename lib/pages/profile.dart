@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/firebase_service.dart';
 import '../widgets/navigation_bar.dart';
 import '../widgets/text_field.dart';
+import '../widgets/text_form_field.dart';
 import '../widgets/text_label.dart';
 import '../widgets/header.dart';
+import '../widgets/transparent_outlinedbutton.dart';
 import '../widgets/background.dart';
 import '../widgets/snackbar.dart';
 
 // ignore: must_be_immutable
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   // The type of account to show.
   String accountType;
   ProfilePage({super.key, this.accountType = 'buyer'});
-  FirebaseService fbService = GetIt.instance<FirebaseService>();
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  final FirebaseService fbService = GetIt.instance<FirebaseService>();
 
   // The text controllers for the fields.
   final TextEditingController nameController = TextEditingController();
@@ -24,19 +33,40 @@ class ProfilePage extends StatelessWidget {
   final TextEditingController addressController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
+  String provider = '';
 
-  // Fetches some data (with a delay) and returns a string.
-  Future<String> fetchData() async {
-    await Future.delayed(const Duration(seconds: 2));
-    return "Data has been fetched!";
+  final changePasswordFormKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Fetch user information when the page loads
+    fetchUserInfo(context);
   }
 
-  // Fetches some data (with a delay) and returns a string, but throws an exception.
-  Future<String> fetchDataWithError() async {
-    await Future.delayed(const Duration(seconds: 2));
-    throw Exception(
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac feugiat augue, quis aliquet orci. Praesent in purus et turpis dictum tincidunt vel fermentum nisl. Nullam in est commodo risus suscipit blandit nec ut nunc. Proin eu erat quis ligula suscipit venenatis. Phasellus ullamcorper metus sed erat mollis, vehicula rutrum.',
-    );
+  void fetchUserInfo(BuildContext context) async {
+    try {
+      var userInfo = await fbService.getUserInformation();
+      if (userInfo != null) {
+        setState(() {
+          // Set the controllers' text to the fetched values
+          nameController.text = userInfo['username'] ?? '';
+          provider = fbService.getCurrentUser()?.providerData[0].providerId ?? '';
+          emailController.text = fbService.getCurrentUser()?.providerData[0].email ?? '';
+          if (widget.accountType == 'shop') {
+            storeNameController.text = userInfo['businessName'] ?? '';
+            addressController.text = userInfo['location'] ?? '';
+          }
+        });
+      }
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(CustomSnackBar(text: 'Error while fetching user information', color: Colors.red, textColor: Colors.white));
+      debugPrint('Error fetching user info: $e');
+    }
   }
 
   // Shows a dialog when user attempts to logout
@@ -75,107 +105,128 @@ class ProfilePage extends StatelessWidget {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map<String, String>?;
 
     // If the account type is not specified, use the one passed in the arguments.
-    if (arguments != null && arguments.containsKey('accountType')) accountType = arguments['accountType']!;
+    if (arguments != null && arguments.containsKey('accountType')) widget.accountType = arguments['accountType']!;
+
+    if (fbService.getCurrentUser() == null) {
+      Future.microtask(() {
+        if (!context.mounted) return;
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
+      });
+      return SizedBox();
+    }
 
     return Scaffold(
-      bottomNavigationBar: NavBar(accountType: accountType, currentIndex: 2),
+      bottomNavigationBar: NavBar(accountType: widget.accountType, currentIndex: 2),
       body: Background(
         padding: 20.0,
-        // The future to fetch the data.
-        child: FutureBuilder<String>(
-          future: fetchData(),
-          builder: (context, snapshot) {
-            // If the future is still waiting, show a loading indicator.
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Column(
-                children: [
-                  Header(hasPadding: false,),
-                  SizedBox(height: 80),
-                  CircularProgressIndicator(color: Colors.black),
-                  SizedBox(height: 15),
-                  Text("Loading...", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
-                ],
-              );
-            } else if (snapshot.hasError) {
-              // If the future has an error, show an error message.
-              return Column(
-                children: [
-                  Header(hasPadding: false,),
-                  SizedBox(height: 80),
-                  Icon(Icons.error, color: Colors.red, size: 50),
-                  SizedBox(height: 15),
-                  Text("An Error Occurred!", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 15),
-                  Text(snapshot.error.toString(), maxLines: 10, overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.black, fontSize: 18)),
-                ],
-              );
-            } else {
-              // If the future has data, show the form.
-              return SingleChildScrollView(
-                scrollDirection: Axis.vertical,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Header(hasPadding: false),
+              Text("General", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
+              SizedBox(height: 20),
+              CustomTextLabel(text: "Username"),
+              CustomTextFormField(controller: nameController, hintText: "Enter Username"),
+              SizedBox(height: 20),
+              CustomTextLabel(text: "Email"),
+              CustomTextFormField(
+                controller: emailController,
+                hintText: "Email",
+                enabled: !(provider == 'google.com' || provider == 'github.com'),
+                inputType: TextInputType.emailAddress,
+              ),
+              if (provider == 'google.com' || provider == 'github.com') ...[
+                SizedBox(height: 5),
+                Row(
+                  children: [
+                    FaIcon(FontAwesomeIcons.circleExclamation, color: Colors.red, size: 12.0),
+                    SizedBox(width: 5),
+                    Text(
+                      "Email can't be changed (${provider.split('.')[0][0].toUpperCase() + provider.split('.')[0].substring(1)} Login)",
+                      style: TextStyle(color: Colors.red, fontSize: 13),
+                    ),
+                  ],
+                ),
+              ],
+              if (widget.accountType == 'shop') ...[
+                SizedBox(height: 20),
+                CustomTextLabel(text: "Business Name"),
+                CustomTextField(controller: storeNameController, hintText: "Enter Business Name", obscureText: false),
+                SizedBox(height: 20),
+                CustomTextLabel(text: "Location"),
+                CustomTextField(controller: addressController, hintText: "Enter Store Location", obscureText: false),
+              ],
+              Align(alignment: Alignment.centerRight, child: TransparentOutlinedbutton(text: "Save", onPressed: () {}, minimumSize: Size(90, 25))),
+              SizedBox(height: 30),
+
+              Text("Change Password", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
+              SizedBox(height: 20),
+              Form(
+                key: changePasswordFormKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Header(hasPadding: false,),
-                    Text("General", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
-                    SizedBox(height: 20),
-                    CustomTextLabel(text: "Username"),
-                    CustomTextField(controller: nameController, hintText: "Enter Username", obscureText: false),
-                    SizedBox(height: 20),
-                    CustomTextLabel(text: "Email"),
-                    CustomTextField(controller: emailController, hintText: "Enter Email", obscureText: false),
-                    if (accountType == 'shop') ...[
-                      SizedBox(height: 20),
-                      CustomTextLabel(text: "Business Name"),
-                      CustomTextField(controller: storeNameController, hintText: "Enter Business Name", obscureText: false),
-                      SizedBox(height: 20),
-                      CustomTextLabel(text: "Location"),
-                      CustomTextField(controller: addressController, hintText: "Enter Store Location", obscureText: false),
-                    ],
-                    Align(alignment: Alignment.centerRight, child: BorderButton(text: "Save")),
-                    SizedBox(height: 30),
-                    Text("Change Password", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
-                    SizedBox(height: 20),
+                    // Text field for the user to enter their new password
                     CustomTextLabel(text: "New Password"),
-                    CustomTextField(controller: passwordController, hintText: "Enter Password", obscureText: false),
+                    CustomTextFormField(
+                      controller: passwordController,
+                      hintText: "Password",
+                      enabled: !(provider == 'google.com' || provider == 'github.com'),
+                    ),
                     SizedBox(height: 20),
+
+                    // Text field for the user to re-enter their new password
                     CustomTextLabel(text: "Re-enter Password"),
-                    CustomTextField(controller: confirmPasswordController, hintText: "Enter Password", obscureText: false),
-                    Align(alignment: Alignment.centerRight, child: BorderButton(text: "Change")),
-                    Center(child: BorderButton(text: "Logout", onPressed: () => showLogoutDialog(context))),
+                    CustomTextFormField(
+                      controller: confirmPasswordController,
+                      hintText: "Password",
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Please enter your password';
+                        if (value != passwordController.text) return "Passwords do not match";
+                        return null;
+                      },
+                      enabled: !(provider == 'google.com' || provider == 'github.com'),
+                    ),
+                    if (provider != 'google.com' && provider != 'github.com') ...[
+                      SizedBox(height: 20),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TransparentOutlinedbutton(
+                          text: "Change",
+                          onPressed: () {
+                            if (changePasswordFormKey.currentState!.validate()) {
+                              changePasswordFormKey.currentState!.save();
+                              fbService.updatePassword(context, passwordController.text);
+                            }
+                          },
+                          minimumSize: Size(90, 25),
+                        ),
+                      ),
+                    ] else ...[
+                      SizedBox(height: 5),
+                      Row(
+                        children: [
+                          FaIcon(FontAwesomeIcons.circleExclamation, color: Colors.red, size: 12.0),
+                          SizedBox(width: 5),
+                          Text(
+                            "Password can't be changed (${provider.split('.')[0][0].toUpperCase() + provider.split('.')[0].substring(1)} Login)",
+                            style: TextStyle(color: Colors.red, fontSize: 13),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                    ],
                   ],
                 ),
-              );
-            }
-          },
+              ),
+
+              Center(child: TransparentOutlinedbutton(text: "Logout", onPressed: () => showLogoutDialog(context), minimumSize: Size(90, 30))),
+            ],
+          ),
         ),
       ),
-    );
-  }
-}
-
-/// A custom button that is styled to have a border around it.
-/// The [text] parameter is the text that will be displayed on the button.
-/// The [onPressed] parameter is an optional callback that will be called
-/// when the button is pressed.
-class BorderButton extends StatelessWidget {
-  final String text;
-  final VoidCallback? onPressed;
-  const BorderButton({super.key, required this.text, this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return OutlinedButton(
-      /// The callback that will be called when the button is pressed.
-      onPressed: onPressed ?? () {},
-      style: OutlinedButton.styleFrom(
-        /// The minimum size for the button.
-        minimumSize: Size(80, 0),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        side: BorderSide(color: Colors.black),
-        padding: EdgeInsets.all(3.0),
-      ),
-      child: Text(text, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
     );
   }
 }
