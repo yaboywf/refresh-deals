@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_it/get_it.dart';
+import '../services/firebase_service.dart';
 import '../widgets/navigation_bar.dart';
 import '../widgets/background.dart';
 import '../widgets/header.dart';
 
 class ShopHomePage extends StatelessWidget {
-  const ShopHomePage({super.key});
+  ShopHomePage({super.key});
+  final FirebaseService fbService = GetIt.instance<FirebaseService>();
 
   @override
   Widget build(BuildContext context) {
+    // If the user is not logged in, redirect to the login page
+    if (fbService.getCurrentUser() == null) {
+      Future.microtask(() {
+        if (!context.mounted) return;
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false);
+      });
+      return SizedBox();
+    }
+
     return Scaffold(
       // navbar
       bottomNavigationBar: NavBar(accountType: 'shop', currentIndex: 0),
