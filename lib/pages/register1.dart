@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../services/firebase_service.dart';
-import '../pages/register2.dart';
+import 'register2.dart';
 import '../widgets/text_label.dart';
 import '../widgets/header.dart';
 import '../widgets/background.dart';
@@ -11,6 +11,22 @@ import '../widgets/transparent_textbutton.dart';
 import '../widgets/transparent_outlinedbutton.dart';
 import '../widgets/snackbar.dart';
 
+/// Registration Process:
+/// 
+/// For Local Registration:
+/// 1. Enters details             (Register1) (HERE)
+/// 2. Email to be verified       (Register2)
+/// 3. Choosing account type      (Register3)
+/// 4. Business details optional  (Register4)
+/// 5. NETS payment               (Register5)
+/// 6. Registration complete      (Register6)
+/// 
+/// For 3rd Party Registration:
+/// 1. Google / Github login      (Login)
+/// 2. Choosing account type      (Register3)
+/// 3. Business details optional  (Register4)
+/// 4. NETS payment               (Register5)
+/// 5. Registration complete      (Register6)
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
 
