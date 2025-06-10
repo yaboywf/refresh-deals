@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
-import '../pages/register2.dart';
+import '../pages/register3.dart';
 import '../widgets/snackbar.dart';
 
 class FirebaseService {
@@ -55,7 +55,7 @@ class FirebaseService {
         if (!context.mounted) return;
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => SignupPage2(username: user.displayName ?? "ReFresher", uid: user.uid)),
+          MaterialPageRoute(builder: (context) => SignupPage3(username: user.displayName ?? "ReFresher", uid: user.uid)),
         );
       }
     } catch (e) {
@@ -84,7 +84,7 @@ class FirebaseService {
         if (!context.mounted) return;
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => SignupPage2(username: user.displayName ?? "ReFresher", uid: user.uid)),
+          MaterialPageRoute(builder: (context) => SignupPage3(username: user.displayName ?? "ReFresher", uid: user.uid)),
         );
       }
     } catch (e) {
@@ -99,20 +99,21 @@ class FirebaseService {
     }
   }
 
-  // get auth user
-  Stream<User?> getAuthUser() {
-    return FirebaseAuth.instance.authStateChanges();
-  }
-
   // get current user
   User? getCurrentUser() {
     return FirebaseAuth.instance.currentUser;
   }
 
   // get user information
-  Future<dynamic> getUserInformation() {
+  Future<dynamic> getUserInformation() async {
     if (getCurrentUser() == null) return Future.value(null);
-    return FirebaseFirestore.instance.collection('users').doc(getCurrentUser()!.uid).get();
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance.collection('users').doc(getCurrentUser()!.uid).get();
+
+    if (!snapshot.exists) {
+      return Future.value(null);
+    }
+
+    return snapshot.data();
   }
 
   // update password
@@ -166,6 +167,19 @@ class FirebaseService {
         ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(text: e.code, color: Colors.red, textColor: Colors.white));
         debugPrint("Error updating username: $e");
       }
+    }
+  }
+
+  // email verification
+  Future<void> sendEmailVerification() async {
+    try {
+      User? user = getCurrentUser();
+
+      if (user != null) {
+        await user.sendEmailVerification();
+      }
+    } catch (e) {
+      debugPrint("Error sending email verification: $e");
     }
   }
 }

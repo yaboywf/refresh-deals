@@ -13,6 +13,22 @@ import '../widgets/snackbar.dart';
 import '../widgets/transparent_textbutton.dart';
 import '../widgets/transparent_outlinedbutton.dart';
 
+/// Registration Process:
+/// 
+/// For Local Registration:
+/// 1. Enters details             (Register1) 
+/// 2. Email to be verified       (Register2)
+/// 3. Choosing account type      (Register3)
+/// 4. Business details optional  (Register4) 
+/// 5. NETS payment               (Register5)
+/// 6. Registration complete      (Register6)
+/// 
+/// For 3rd Party Registration:
+/// 1. Google / Github login      (Login)     (HERE)
+/// 2. Choosing account type      (Register3)
+/// 3. Business details optional  (Register4) 
+/// 4. NETS payment               (Register5) 
+/// 5. Registration complete      (Register6)
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
