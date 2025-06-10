@@ -59,13 +59,16 @@ class _LoginPageState extends State<LoginPage> {
       DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user?.uid).get();
       if (userDoc.exists) {
         if (!context.mounted) return;
+        User? currentUser = fbService.getCurrentUser();
+        await currentUser?.updateDisplayName(userDoc['username']);
+        if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar(text: 'Hello, ${userDoc['username']} ($email)!'));
         Navigator.pushReplacementNamed(context, "/${userDoc['accountType']}_home");
       }
     } on FirebaseAuthException catch (e) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        CustomSnackBar(text: e.code == 'invalid-credentials' ? "Incorrect username or password" : e.code, color: Colors.red, textColor: Colors.white),
+        CustomSnackBar(text: e.code == 'invalid-credential' ? "Incorrect username or password" : e.code, color: Colors.red, textColor: Colors.white),
       );
     }
   }

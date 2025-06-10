@@ -62,8 +62,6 @@ class MyApp extends StatelessWidget {
             return Scaffold(body: Center(child: Text('Error: ${snapshot.error}')));
           }
 
-          debugPrint(snapshot.data.toString());
-
           if (snapshot.data == null) return LoginPage();
 
           return snapshot.data['accountType'] == 'buyer' ? BuyerHomepage() : ShopHomePage(); 

@@ -48,7 +48,7 @@ class ShopHomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Hello, John Doe",
+                      "Hello, ${fbService.getCurrentUser()!.displayName}",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
