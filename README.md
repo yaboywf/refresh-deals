@@ -18,3 +18,5 @@ Having an app that allows shop owners to keep track of items that are expiring c
 
 ### Frequent Buyers
 The app can provide a marketplace where customers can view and purchase products that are close to expiry but still safe for consumption. They can enjoy discounts on these products, making it an attractive option for those who are looking to save money. This feature encourages responsible consumption and supports sustainability by minimising food waste.
+
+### Temasek Polytechnic Mobile Application Development (MBAP) Project
