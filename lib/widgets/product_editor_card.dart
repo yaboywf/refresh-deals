@@ -16,12 +16,15 @@ class ProductEditorCard extends StatefulWidget {
   final int? quantity;
   final double? currentPrice;
   final String indexKey;
+  final Function(String) onDismissedCallback;
+
   const ProductEditorCard({
     super.key,
     required this.indexKey,
     this.expiryDate,
     this.quantity,
     this.currentPrice,
+    required this.onDismissedCallback
   });
 
   @override
@@ -148,7 +151,9 @@ class _ProductEditorCardState extends State<ProductEditorCard> {
         ),
       ),
       direction: DismissDirection.endToStart,
-      onDismissed: (direction) {},
+      onDismissed: (direction) {
+        widget.onDismissedCallback(widget.indexKey);
+      },
       child: Container(
         padding: const EdgeInsets.all(15.0),
         decoration: BoxDecoration(

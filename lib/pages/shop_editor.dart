@@ -193,6 +193,11 @@ class _ShopEditorPageState extends State<ShopEditorPage> {
                         expiryDate: quantityList[index]['expiryDate'],
                         currentPrice: quantityList[index]['price'],
                         quantity: quantityList[index]['quantity'],
+                        onDismissedCallback: (index) {
+                          setState(() {
+                            quantityList.removeAt(int.parse(index));
+                          });
+                        },
                       ),
                       SizedBox(height: 10.0),
                     ],
